@@ -2,6 +2,9 @@
 
 Your friendly, lightweight and configurable package manager.
 
+It is a package manager with can be used to distribute your own packages.
+It is meant to install all packages in userland.
+
 __This is a work in progress. Do not use yet!__
 
 ## Requirements
