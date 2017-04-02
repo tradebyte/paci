@@ -40,4 +40,28 @@ These are the planned commands.
 - Run tests: `$ python setup.py test`
 - Activate virtualenv: `. env/bin/activate`
 - Deactivate virtualenv: `deactivate`
-- If you'd like to cut a new release of this CLI tool: `$ python setup.py sdist bdist_wheel` 
+- If you'd like to cut a new release of this CLI tool: `$ python setup.py sdist bdist_wheel`
+
+
+## Contributing
+
+See the [CONTRIBUTING] document.
+Thank you, [contributors]!
+
+  [CONTRIBUTING]: CONTRIBUTING.md
+  [contributors]: https://github.com/tradebyte/paci/graphs/contributors
+
+## License
+
+paci is Copyright (c) 2017 Tradebyte Software GmbH.
+It is free software, and may be redistributed
+under the terms specified in the [LICENSE] file.
+
+  [LICENSE]: /LICENSE
+
+## About
+
+paci is maintained and funded by Tradebyte Software GmbH.
+The names and logos for paci are trademarks of Tradebyte Software GmbH..
+
+We love open source software!
