@@ -45,7 +45,7 @@ These are the planned commands.
 
 ## Contributing
 
-See the [CONTRIBUTING] document.
+See the [CONTRIBUTING] document.<br/>
 Thank you, [contributors]!
 
   [CONTRIBUTING]: CONTRIBUTING.md
@@ -53,15 +53,14 @@ Thank you, [contributors]!
 
 ## License
 
-paci is Copyright (c) 2017 Tradebyte Software GmbH.
-It is free software, and may be redistributed
-under the terms specified in the [LICENSE] file.
+Copyright (c) 2017 by the Tradebyte Software GmbH.<br/>
+`paci` is free software, and may be redistributed under the terms specified in the [LICENSE] file.
 
   [LICENSE]: /LICENSE
 
 ## About
 
-paci is maintained and funded by Tradebyte Software GmbH.
-The names and logos for paci are trademarks of Tradebyte Software GmbH..
+`paci` is maintained and funded by the Tradebyte Software GmbH. <br/>
+The names and logos for `paci` are trademarks of the Tradebyte Software GmbH.
 
-We love open source software!
+We love free software!
