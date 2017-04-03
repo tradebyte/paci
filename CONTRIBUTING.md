@@ -2,12 +2,12 @@
 
 We love contributions from everyone.
 By participating in this project,
-you agree to abide by the thoughtbot [code of conduct].
+you agree to abide by our [code of conduct].
 
-  [code of conduct]: code-of-conduct.md
+  [code of conduct]: https://tradebyte.github.io/Code-of-Conduct/
 
 We expect everyone to follow the code of conduct
-anywhere in thoughtbot's project codebases,
+anywhere in `paci`'s project codebases,
 issue trackers, chatrooms, and mailing lists.
 
 ## Contributing Code
