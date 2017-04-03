@@ -1,6 +1,11 @@
 """The install command."""
 
 import requests
+import tempfile
+import os
+import ruamel.yaml
+import hashlib
+import shutil
 from .base import Base
 from clint.textui import progress
 from jsontraverse.parser import JsonTraverseParser
@@ -10,53 +15,100 @@ class Install(Base):
     """Install!"""
 
     @staticmethod
-    def __download(url, path):
+    def __download(url, path, debug_mode=False):
+
         file = url.split('/')[-1]
-        req = requests.get(url, stream=True)
         file_path = path + "/" + file
-        print("Downloading " + file + " into " + file_path)
-        with open(file_path, 'wb') as f:
-            total_length = int(req.headers.get('content-length'))
-            for chunk in progress.bar(req.iter_content(chunk_size=1024), expected_size=(total_length / 1024) + 1):
-                if chunk:
-                    f.write(chunk)
-                    f.flush()
+
+        print("Downloading " + file + "...")
+        print("Directory: " + file_path)
+
+        if not debug_mode:
+            req = requests.get(url, stream=True)
+            with open(file_path, 'wb') as f:
+                total_length = int(req.headers.get('content-length'))
+                for chunk in progress.bar(req.iter_content(chunk_size=1024), expected_size=(total_length / 1024) + 1):
+                    if chunk:
+                        f.write(chunk)
+                        f.flush()
+
+        return file_path
+
+    @staticmethod
+    def __verify_file(file, sha512sum, debug_mode=False):
+        """"This function returns if a file was downloaded correctly."""
+
+        if debug_mode:
+            return True
+
+        # make a hash object
+        h = hashlib.sha512()
+
+        # open file for reading in binary mode
+        with open(file, 'rb') as file:
+            # loop till the end of the file
+            chunk = 0
+            while chunk != b'':
+                # read only 1024 bytes at a time
+                chunk = file.read(1024)
+                h.update(chunk)
+
+        return h.hexdigest() == sha512sum
 
     def run(self):
-        print('Hello, world!')
+        PACI_TEMP = '/tmp/paci'
+
         args = self.options
+        pkg_name = args['<package>']
+        debug_mode = False if args['--debug'] is None else args['--debug']
+
         # print('You supplied the following options:', dumps(self.options, indent=2, sort_keys=True))
+        # if args['--no-config']:
+        #     print("no-config!")
 
-        if args['--no-config']:
-            print("no-config!")
+        print("Package: " + pkg_name + "\n")
 
-        print("Package: " + args['<package>'])
+        # Create temporary package directory
+        os.makedirs(PACI_TEMP, exist_ok=True)
+        pkg_temp_dir = tempfile.mkdtemp(dir=PACI_TEMP, prefix=pkg_name + '_')
 
-        json = """
-        {
-            "get": [
-                {
-                    "source": "https://download.jetbrains.com/webide/PhpStorm-{{VERSION}}.tar.gz",
-                    "sha512sum": "38d9b49ab60c5e315c4891ec4f0c261028ba7e5012effc174a8e044ed4a6d4052fbde6913815c7dd97b4fcd08852a55b4819bda77a4a8ff476141216a3ef57ee"
-                },
-                {
-                    "source": "https://d3nmt5vlzunoa1.cloudfront.net/phpstorm/files/2015/12/PhpStorm_400x400_Twitter_logo_white.png",
-                    "sha512sum": "2c6b469befaf6d9316ac38e97240d5031a418a327b8a6593cb17bae6ef0932f310fec6656bb4574740699155d332fb81261bc55de6090e0cb34af79451bfce20"
-                }
-            ]
-        }
-        """
+        registry_url = 'https://raw.githubusercontent.com/tradebyte/paci_packages/master'
+        pkg_url = registry_url + "/" + pkg_name
 
-        version = "2017.1"
+        # Download RECIPE.yml
+        pkg_recipe = self.__download(pkg_url + "/RECIPE.yml", pkg_temp_dir)
+        print("Download: Successful \n")
 
-        parser = JsonTraverseParser(json)
-        files = parser.traverse("get")
+        # Read RECIPE.yml
+        print("Reading RECIPE.yml...")
+        with open(pkg_recipe, 'r') as recipe_file:
+            pkg_conf = ruamel.yaml.load(recipe_file.read(), ruamel.yaml.RoundTripLoader)
+            if debug_mode:
+                print("name: " + pkg_conf['name'])
+                print("version: " + pkg_conf['version'])
+                print("summary: " + pkg_conf['summary'])
+            print()
 
-        for idx, file in enumerate(files):
-            files[idx]['source'] = file['source'].replace('{{VERSION}}', version)
+        # Download GET.json
+        pkg_get = self.__download(pkg_url + "/GET.json", pkg_temp_dir)
+        print("Download: Successful \n")
 
-        print(files[0]['source'])
-        self.__download(files[0]['source'], '/tmp')
+        # Process GET.json
+        print("Processing GET.json... \n")
+        with open(pkg_get, 'r') as get_file:
+            parser = JsonTraverseParser(get_file.read())
+            files = parser.traverse("get")
 
+            # work through all downloads
+            for file in files:
+                url = file['source'].replace('{{VERSION}}', pkg_conf['version'])
+                sha512sum = file['sha512sum']
+                if self.__verify_file(self.__download(url, pkg_temp_dir, debug_mode), sha512sum, debug_mode):
+                    print("Download: Successful \n")
+                else:
+                    print("Download: FAILED")
+                    break
 
-
+        # Cleanup if successful
+        if not args['--no-cleanup']:
+            shutil.rmtree(pkg_temp_dir)
