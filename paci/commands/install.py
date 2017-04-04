@@ -6,6 +6,7 @@ import os
 import ruamel.yaml
 import hashlib
 import shutil
+import requests
 from .base import Base
 from clint.textui import progress
 from jsontraverse.parser import JsonTraverseParser
@@ -35,11 +36,15 @@ class Install(Base):
         return file_path
 
     @staticmethod
-    def __verify_file(file, sha512sum, debug_mode=False):
-        """"This function returns if a file was downloaded correctly."""
+    def __url_exists(url):
+        """Check if a given url exists."""
 
-        if debug_mode:
-            return True
+        codes = [200, 302]  # 200 OK, 302 Found
+        return True if requests.head(url).status_code in codes else False
+
+    @staticmethod
+    def __verify_file(file, sha512sum):
+        """"This function returns if a file is not corrupted."""
 
         # make a hash object
         h = hashlib.sha512()
