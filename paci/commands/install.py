@@ -1,12 +1,12 @@
 """The install command."""
 
-import requests
 import tempfile
 import os
 import ruamel.yaml
 import hashlib
 import shutil
 import requests
+import subprocess
 from .base import Base
 from clint.textui import progress
 from jsontraverse.parser import JsonTraverseParser
@@ -82,8 +82,21 @@ class Install(Base):
 
         return h.hexdigest() == sha512sum
 
+    def __get_additional_files(self, debug_mode, pkg_conf, file, pkg_temp_dir):
+        with open(file, 'r') as get_file:
+            parser = JsonTraverseParser(get_file.read())
+            files = parser.traverse("get")
+
+            # work through all downloads
+            for file in files:
+                url = file['source'].replace('{{VERSION}}', pkg_conf['version'])
+                sha512sum = file['sha512sum']
+                self.__download(url, pkg_temp_dir, sha512sum, debug_mode)
+
     def run(self):
         PACI_TEMP = '/tmp/paci'
+        PACI_BASE = os.environ.get('HOME') + '/.paci/apps'
+        os.makedirs(PACI_BASE, exist_ok=True)
         registry_url = 'https://raw.githubusercontent.com/tradebyte/paci_packages/master'
 
         args = self.options
@@ -133,17 +146,28 @@ class Install(Base):
         # TODO: Extract SOURCES.tar.gz
 
         # Process GET.json
-        with open(pkg_files['GET.json'], 'r') as get_file:
-            parser = JsonTraverseParser(get_file.read())
-            files = parser.traverse("get")
-
-            # work through all downloads
-            for file in files:
-                url = file['source'].replace('{{VERSION}}', pkg_conf['version'])
-                sha512sum = file['sha512sum']
-                self.__download(url, pkg_temp_dir, sha512sum, debug_mode)
+        self.__get_additional_files(debug_mode, pkg_conf, pkg_files['GET.json'], pkg_temp_dir)
 
         # TODO: Execute INSTALL.sh
+
+        # Create package directory
+        pkg_dir = PACI_BASE + "/" + pkg_name + "_" + pkg_conf['version']
+        os.makedirs(pkg_dir, exist_ok=True)
+
+        # Set global variables for the script
+        os.environ["pkg_dir"] = pkg_dir
+        os.environ["pkg_src"] = pkg_temp_dir
+        os.environ["pkg_ver"] = pkg_conf['version']
+        os.environ["pkg_desc"] = pkg_conf['summary']
+        os.environ["pkg_name"] = pkg_conf['name']
+
+        with open(pkg_files['INSTALL.sh'], 'r') as f:
+            try:
+                res = subprocess.check_output(['bash', '-c', f.read()], cwd=pkg_temp_dir)
+                for line in res.splitlines():
+                    print(line.decode("utf-8"))
+            except subprocess.CalledProcessError as e:
+                print(e.output)
 
         # TODO: Process DESKTOP file (template -> move)
 
