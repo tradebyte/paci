@@ -15,25 +15,47 @@ from jsontraverse.parser import JsonTraverseParser
 class Install(Base):
     """Install!"""
 
-    @staticmethod
-    def __download(url, path, debug_mode=False):
+    def __download(self, url, path, sha512sum=None, debug_mode=False):
+        """Download a file, show the progress and do integrity checks."""
 
         file = url.split('/')[-1]
         file_path = path + "/" + file
 
-        print("Downloading " + file + "...")
-        print("Directory: " + file_path)
+        if self.__url_exists(url):
+            print("Downloading " + file + "...")
+            print("Directory: " + file_path)
 
-        if not debug_mode:
-            req = requests.get(url, stream=True)
-            with open(file_path, 'wb') as f:
-                total_length = int(req.headers.get('content-length'))
-                for chunk in progress.bar(req.iter_content(chunk_size=1024), expected_size=(total_length / 1024) + 1):
-                    if chunk:
-                        f.write(chunk)
-                        f.flush()
+            # Process the download and show progress
+            if not debug_mode:
+                req = requests.get(url, stream=True)
+                with open(file_path, 'wb') as f:
+                    total_length = int(req.headers.get('content-length'))
+                    for chunk in progress.bar(req.iter_content(chunk_size=1024), expected_size=(total_length / 1024) + 1):
+                        if chunk:
+                            f.write(chunk)
+                            f.flush()
 
-        return file_path
+                # Verify that the download was successful
+                if sha512sum is not None:
+                    if not self.__verify_file(file_path, sha512sum):
+                        print(file + " could not be downloaded.")
+                        exit(1)
+
+                print("Download: Successful \n")
+                return file_path
+        else:
+            return False
+
+    @staticmethod
+    def __read_yaml(file):
+        """Read a YAML file and return its contents as a dict."""
+
+        if os.path.exists(file):
+            with open(file, 'r') as f:
+                return ruamel.yaml.load(f.read(), ruamel.yaml.RoundTripLoader)
+        else:
+            file(file, 'w').close()
+            return False
 
     @staticmethod
     def __url_exists(url):
@@ -62,45 +84,56 @@ class Install(Base):
 
     def run(self):
         PACI_TEMP = '/tmp/paci'
+        registry_url = 'https://raw.githubusercontent.com/tradebyte/paci_packages/master'
 
         args = self.options
-        pkg_name = args['<package>']
-        debug_mode = False if args['--debug'] is None else args['--debug']
+        pkg_files = {
+            'GET.json': '',
+            'INSTALL.sh': '',
+            'DESKTOP': '',
+            'CONF.tar.gz': '',
+        }
 
-        # print('You supplied the following options:', dumps(self.options, indent=2, sort_keys=True))
-        # if args['--no-config']:
-        #     print("no-config!")
+        pkg_name = args['<package>']
+        pkg_url = registry_url + "/" + pkg_name
 
         print("Package: " + pkg_name + "\n")
+
+        # Handle arguments
+        debug_mode = False if args['--debug'] is None else args['--debug']
 
         # Create temporary package directory
         os.makedirs(PACI_TEMP, exist_ok=True)
         pkg_temp_dir = tempfile.mkdtemp(dir=PACI_TEMP, prefix=pkg_name + '_')
 
-        registry_url = 'https://raw.githubusercontent.com/tradebyte/paci_packages/master'
-        pkg_url = registry_url + "/" + pkg_name
-
         # Download RECIPE.yml
         pkg_recipe = self.__download(pkg_url + "/RECIPE.yml", pkg_temp_dir)
-        print("Download: Successful \n")
+        if pkg_recipe:
+            # Read it
+            pkg_conf = self.__read_yaml(pkg_recipe)
+            if not pkg_conf:
+                print("Could not read RECIPE.yml.")
+                exit(1)
+        else:
+            print("Abort. RECIPE.yml could not be downloaded.")
+            exit(1)
 
-        # Read RECIPE.yml
-        print("Reading RECIPE.yml...")
-        with open(pkg_recipe, 'r') as recipe_file:
-            pkg_conf = ruamel.yaml.load(recipe_file.read(), ruamel.yaml.RoundTripLoader)
-            if debug_mode:
-                print("name: " + pkg_conf['name'])
-                print("version: " + pkg_conf['version'])
-                print("summary: " + pkg_conf['summary'])
-            print()
+        # Download all meta files
+        for (file, path) in pkg_files.items():
+            pkg_files[file] = self.__download(pkg_url + "/" + file, pkg_temp_dir)
 
-        # Download GET.json
-        pkg_get = self.__download(pkg_url + "/GET.json", pkg_temp_dir)
-        print("Download: Successful \n")
+        # Download SOURCES.tar.gz
+        if 'sources' in pkg_conf:
+            pkg_files['SOURCES.tar.gz'] = self.__download(
+                pkg_url + "/" + pkg_conf['sources'],
+                pkg_temp_dir,
+                pkg_conf['sha512sum']
+            )
+
+        # TODO: Extract SOURCES.tar.gz
 
         # Process GET.json
-        print("Processing GET.json... \n")
-        with open(pkg_get, 'r') as get_file:
+        with open(pkg_files['GET.json'], 'r') as get_file:
             parser = JsonTraverseParser(get_file.read())
             files = parser.traverse("get")
 
@@ -108,11 +141,13 @@ class Install(Base):
             for file in files:
                 url = file['source'].replace('{{VERSION}}', pkg_conf['version'])
                 sha512sum = file['sha512sum']
-                if self.__verify_file(self.__download(url, pkg_temp_dir, debug_mode), sha512sum, debug_mode):
-                    print("Download: Successful \n")
-                else:
-                    print("Download: FAILED")
-                    break
+                self.__download(url, pkg_temp_dir, sha512sum, debug_mode)
+
+        # TODO: Execute INSTALL.sh
+
+        # TODO: Process DESKTOP file (template -> move)
+
+        # TODO: Extract CONF.tar.gz
 
         # Cleanup if successful
         if not args['--no-cleanup']:
