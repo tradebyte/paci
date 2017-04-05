@@ -2,4 +2,6 @@ build
 dist
 env
 .idea
+.eggs
+*.egg-info
 __pycache__/
