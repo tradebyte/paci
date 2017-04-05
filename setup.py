@@ -17,23 +17,6 @@ with open('LICENSE') as f:
     license = f.read()
 
 
-class RunTests(Command):
-    """Run all tests."""
-    description = 'run tests'
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        """Run all tests!"""
-        errno = call(['py.test', '--cov=paci', '--cov-report=term-missing'])
-        raise SystemExit(errno)
-
-
 setup(
     name='paci',
     version=__version__,
@@ -60,10 +43,11 @@ setup(
     extras_require={
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'paci=paci.cli:main',
         ],
-    },
-    cmdclass={'test': RunTests},
+    }
 )
