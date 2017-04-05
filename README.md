@@ -1,6 +1,6 @@
 # paci
 
-Your friendly, lightweight and configurable package manager.
+Your friendly, lightweight and flexible package manager.
 
 It is a package manager with can be used to distribute your own packages.
 It is meant to install all packages in userland.

@@ -20,7 +20,7 @@ with open('LICENSE') as f:
 setup(
     name='paci',
     version=__version__,
-    description='Your friendly, lightweight and configurable package manager.',
+    description='Your friendly, lightweight and flexible package manager.',
     long_description=readme,
     url='http://gitlab.tradebyte-office.de/qa/paci',
     author='Niklas Heer',
