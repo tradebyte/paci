@@ -1,16 +1,21 @@
-"""Tests for our `skele hello` subcommand."""
+"""Tests for our `hello` command."""
 
+import unittest
+from unittest.mock import patch
+from docopt import docopt
+from io import StringIO
+import paci.cli as paci
+from paci.commands.hello import Hello
 
-from subprocess import PIPE, Popen as popen
-from unittest import TestCase
+doc = paci.__doc__
 
+class TestHello(unittest.TestCase):
+    def test_args_hello_world(self):
+        args = docopt(doc, ["hello"])
+        self.assertEqual(args["hello"], True)
 
-class TestHello(TestCase):
-    def test_returns_multiple_lines(self):
-        output = popen(['paci', 'hello'], stdout=PIPE).communicate()[0]
-        lines = output.split('\n')
-        self.assertTrue(len(lines) != 1)
-
-    def test_returns_hello_world(self):
-        output = popen(['paci', 'hello'], stdout=PIPE).communicate()[0]
-        self.assertTrue('Hello, world!' in output)
+@unittest.mock.patch('sys.stdout', new_callable=StringIO)
+def test_prints_hello_world_args(mock_stdout):
+    hello = Hello(["test"])
+    hello.run()
+    assert 'Hello, world!\nYou supplied the following options: [\n  "test"\n]\n' == mock_stdout.getvalue()
