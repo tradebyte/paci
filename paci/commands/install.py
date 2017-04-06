@@ -106,7 +106,7 @@ class Install(Base):
 
         PACI_TEMP = settings["paci"]["temp"]
         PACI_BASE = settings["paci"]["base"]
-        registry_url = 'https://raw.githubusercontent.com/tradebyte/paci_packages/master'
+        registry_url = settings["paci"]["registry"]["main"]
 
         os.makedirs(PACI_BASE, exist_ok=True)
 
