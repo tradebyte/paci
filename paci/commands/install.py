@@ -122,6 +122,13 @@ class Install(Base):
         for key, value in pkg_constants.items():
             os.environ[key] = value
 
+    @staticmethod
+    def __create_desktop_file(desktop_file_dir, pkg_constants, desktop_file):
+        with open(desktop_file, 'r') as file:
+            desktop_file = Template(file.read()).render(pkg_constants)
+        with open(desktop_file_dir + '/' + pkg_constants['pkg_name'] + '.desktop', 'w') as file:
+            file.write(desktop_file)
+
     def run(self):
         PACI_TEMP = '/tmp/paci'
         PACI_BASE = os.environ.get('HOME') + '/.paci/apps'
@@ -167,7 +174,7 @@ class Install(Base):
             'pkg_name': pkg_conf['name']
         }
 
-        if 'sources' in pkg_conf:
+        if 'DESKTOP' in pkg_conf:
             pkg_files['SOURCES.tar.gz'] = self.__download(
                 pkg_url + "/" + pkg_conf['sources'],
                 pkg_constants['pkg_src'],
@@ -175,11 +182,18 @@ class Install(Base):
             )
 
         # TODO: Extract SOURCES.tar.gz
-        self.__get_additional_files(pkg_files['GET.json'], pkg_constants['pkg_src'], pkg_constants)
-        self.__set_script_variables(pkg_constants)
-        self.__execute_shell_script(pkg_files['INSTALL.sh'], pkg_constants['pkg_src'])
-        # TODO: Process DESKTOP file (template -> move)
-        # template.render(pkg_constants)
+
+        if pkg_files['GET.json']:
+            self.__get_additional_files(pkg_files['GET.json'], pkg_constants['pkg_src'], pkg_constants)
+
+        if pkg_files['INSTALL.sh']:
+            self.__set_script_variables(pkg_constants)
+            self.__execute_shell_script(pkg_files['INSTALL.sh'], pkg_constants['pkg_src'])
+
+        if pkg_files['DESKTOP']:
+            desktop_file_dir = os.environ.get('HOME') + '/.local/share/applications'
+            self.__create_desktop_file(desktop_file_dir, pkg_constants, pkg_files['DESKTOP'])
+
         # TODO: Extract CONF.tar.gz
 
         # Cleanup if successful
