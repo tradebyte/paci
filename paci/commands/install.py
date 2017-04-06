@@ -138,11 +138,7 @@ class Install(Base):
 
         settings = settings_helper.fetch_settings()
 
-        PACI_TEMP = settings["paci"]["temp"]
-        PACI_BASE = settings["paci"]["base"]
-        registry_url = settings["paci"]["registry"]["main"]
-
-        os.makedirs(PACI_BASE, exist_ok=True)
+        os.makedirs(settings["paci"]["base"], exist_ok=True)
 
         args = self.options
 
@@ -154,13 +150,13 @@ class Install(Base):
         }
 
         pkg_name = args['<package>']
-        pkg_url = registry_url + "/" + pkg_name
+        pkg_url = settings["paci"]["registry"]["main"] + "/" + pkg_name  # TODO: handle fallback repo
 
         print("Package: " + pkg_name + "\n")
 
         # Create temporary package directory
-        os.makedirs(PACI_TEMP, exist_ok=True)
-        pkg_temp_dir = tempfile.mkdtemp(dir=PACI_TEMP, prefix=pkg_name + '_')
+        os.makedirs(settings["paci"]["temp"], exist_ok=True)
+        pkg_temp_dir = tempfile.mkdtemp(dir=settings["paci"]["temp"], prefix=pkg_name + '_')
 
         # Download RECIPE.yml
         pkg_recipe = self.__download(pkg_url + "/RECIPE.yml", pkg_temp_dir)
@@ -171,7 +167,7 @@ class Install(Base):
             pkg_files[file] = self.__download(pkg_url + "/" + file, pkg_temp_dir)
 
         # Create package directory
-        pkg_dir = PACI_BASE + "/" + pkg_name + "_" + pkg_conf['version']
+        pkg_dir = settings["paci"]["base"] + "/" + pkg_name + "_" + pkg_conf['version']
         os.makedirs(pkg_dir, exist_ok=True)
 
         # Create package constants (e.g. used for the templates)
