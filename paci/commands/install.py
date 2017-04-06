@@ -17,7 +17,7 @@ from jsontraverse.parser import JsonTraverseParser
 class Install(Base):
     """Install!"""
 
-    def __download(self, url, path, sha512sum=None, debug_mode=False):
+    def __download(self, url, path, sha512sum=None):
         """Download a file, show the progress and do integrity checks."""
 
         file = url.split('/')[-1]
@@ -28,23 +28,21 @@ class Install(Base):
             print("Directory: " + file_path)
 
             # Process the download and show progress
-            if not debug_mode:
-                req = requests.get(url, stream=True)
-                with open(file_path, 'wb') as f:
-                    total_length = int(req.headers.get('content-length'))
-                    for chunk in progress.bar(req.iter_content(chunk_size=1024), expected_size=(total_length / 1024) + 1):
-                        if chunk:
-                            f.write(chunk)
-                            f.flush()
+            req = requests.get(url, stream=True)
+            with open(file_path, 'wb') as f:
+                total_length = int(req.headers.get('content-length'))
+                for chunk in progress.bar(req.iter_content(chunk_size=1024), expected_size=(total_length / 1024) + 1):
+                    if chunk:
+                        f.write(chunk)
+                        f.flush()
+            # Verify that the download was successful
+            if sha512sum is not None:
+                if not self.__verify_file(file_path, sha512sum):
+                    print(file + " could not be downloaded.")
+                    exit(1)
 
-                # Verify that the download was successful
-                if sha512sum is not None:
-                    if not self.__verify_file(file_path, sha512sum):
-                        print(file + " could not be downloaded.")
-                        exit(1)
-
-                print("Download: Successful \n")
-                return file_path
+            print("Download: Successful \n")
+            return file_path
         else:
             return False
 
@@ -84,7 +82,7 @@ class Install(Base):
 
         return h.hexdigest() == sha512sum
 
-    def __get_additional_files(self, debug_mode, pkg_conf, file, pkg_temp_dir, constants):
+    def __get_additional_files(self, file, pkg_src, constants):
         with open(file, 'r') as get_file:
             parser = JsonTraverseParser(get_file.read())
             files = parser.traverse("get")
@@ -93,7 +91,36 @@ class Install(Base):
             for file in files:
                 url = Template(file['source']).render(constants)
                 sha512sum = file['sha512sum']
-                self.__download(url, pkg_temp_dir, sha512sum, debug_mode)
+                self.__download(url, pkg_src, sha512sum)
+
+    def __get_pkg_conf(self, pkg_recipe):
+        if pkg_recipe:
+            # Read it
+            conf = self.__read_yaml(pkg_recipe)
+            if not conf:
+                print("Could not read RECIPE.yml.")
+                exit(1)
+            else:
+                return conf
+        else:
+            print("Abort. RECIPE.yml could not be downloaded.")
+            exit(1)
+        return None
+
+    @staticmethod
+    def __execute_shell_script(script, working_dir):
+        with open(script, 'r') as f:
+            try:
+                res = subprocess.check_output(['bash', '-c', f.read()], cwd=working_dir)
+                for line in res.splitlines():
+                    print(line.decode("utf-8"))
+            except subprocess.CalledProcessError as e:
+                print(e.output)
+
+    @staticmethod
+    def __set_script_variables(pkg_constants):
+        for key, value in pkg_constants.items():
+            os.environ[key] = value
 
     def run(self):
         PACI_TEMP = '/tmp/paci'
@@ -102,6 +129,7 @@ class Install(Base):
         registry_url = 'https://raw.githubusercontent.com/tradebyte/paci_packages/master'
 
         args = self.options
+
         pkg_files = {
             'GET.json': '',
             'INSTALL.sh': '',
@@ -114,71 +142,44 @@ class Install(Base):
 
         print("Package: " + pkg_name + "\n")
 
-        # Handle arguments
-        debug_mode = False if args['--debug'] is None else args['--debug']
-
         # Create temporary package directory
         os.makedirs(PACI_TEMP, exist_ok=True)
         pkg_temp_dir = tempfile.mkdtemp(dir=PACI_TEMP, prefix=pkg_name + '_')
 
         # Download RECIPE.yml
         pkg_recipe = self.__download(pkg_url + "/RECIPE.yml", pkg_temp_dir)
-        if pkg_recipe:
-            # Read it
-            pkg_conf = self.__read_yaml(pkg_recipe)
-            if not pkg_conf:
-                print("Could not read RECIPE.yml.")
-                exit(1)
-        else:
-            print("Abort. RECIPE.yml could not be downloaded.")
-            exit(1)
+        pkg_conf = self.__get_pkg_conf(pkg_recipe)
 
         # Download all meta files
         for (file, path) in pkg_files.items():
             pkg_files[file] = self.__download(pkg_url + "/" + file, pkg_temp_dir)
 
-        # Download SOURCES.tar.gz
-        if 'sources' in pkg_conf:
-            pkg_files['SOURCES.tar.gz'] = self.__download(
-                pkg_url + "/" + pkg_conf['sources'],
-                pkg_temp_dir,
-                pkg_conf['sha512sum']
-            )
-
-        # TODO: Extract SOURCES.tar.gz
-
         # Create package directory
         pkg_dir = PACI_BASE + "/" + pkg_name + "_" + pkg_conf['version']
         os.makedirs(pkg_dir, exist_ok=True)
 
+        # Create package constants (e.g. used for the templates)
         pkg_constants = {
+            'pkg_src': pkg_temp_dir,
             'pkg_dir': pkg_dir,
             'pkg_ver': pkg_conf['version'],
             'pkg_desc': pkg_conf['summary'],
             'pkg_name': pkg_conf['name']
         }
 
-        # Process GET.json
-        self.__get_additional_files(debug_mode, pkg_conf, pkg_files['GET.json'], pkg_temp_dir, pkg_constants)
+        if 'sources' in pkg_conf:
+            pkg_files['SOURCES.tar.gz'] = self.__download(
+                pkg_url + "/" + pkg_conf['sources'],
+                pkg_constants['pkg_src'],
+                pkg_conf['sha512sum']
+            )
 
-        # Set global variables for the script
-        os.environ["pkg_src"] = pkg_temp_dir
-        os.environ["pkg_dir"] = pkg_constants['pkg_dir']
-        os.environ["pkg_ver"] = pkg_constants['pkg_ver']
-        os.environ["pkg_desc"] = pkg_constants['pkg_desc']
-        os.environ["pkg_name"] = pkg_constants['pkg_name']
-
-        with open(pkg_files['INSTALL.sh'], 'r') as f:
-            try:
-                res = subprocess.check_output(['bash', '-c', f.read()], cwd=pkg_temp_dir)
-                for line in res.splitlines():
-                    print(line.decode("utf-8"))
-            except subprocess.CalledProcessError as e:
-                print(e.output)
-
+        # TODO: Extract SOURCES.tar.gz
+        self.__get_additional_files(pkg_files['GET.json'], pkg_constants['pkg_src'], pkg_constants)
+        self.__set_script_variables(pkg_constants)
+        self.__execute_shell_script(pkg_files['INSTALL.sh'], pkg_constants['pkg_src'])
         # TODO: Process DESKTOP file (template -> move)
         # template.render(pkg_constants)
-
         # TODO: Extract CONF.tar.gz
 
         # Cleanup if successful
