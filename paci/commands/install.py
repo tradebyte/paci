@@ -12,6 +12,7 @@ from jinja2 import Template
 from .base import Base
 from clint.textui import progress
 from jsontraverse.parser import JsonTraverseParser
+from paci.helpers.settings import Settings
 
 
 class Install(Base):
@@ -96,10 +97,18 @@ class Install(Base):
                 self.__download(url, pkg_temp_dir, sha512sum, debug_mode)
 
     def run(self):
-        PACI_TEMP = '/tmp/paci'
-        PACI_BASE = os.environ.get('HOME') + '/.paci/apps'
-        os.makedirs(PACI_BASE, exist_ok=True)
+        settings_helper = Settings()
+
+        if settings_helper.settings_exist() is False:
+            settings_helper.write_settings(settings_helper.defaults)
+
+        settings = settings_helper.fetch_settings()
+
+        PACI_TEMP = settings["paci"]["temp"]
+        PACI_BASE = settings["paci"]["base"]
         registry_url = 'https://raw.githubusercontent.com/tradebyte/paci_packages/master'
+
+        os.makedirs(PACI_BASE, exist_ok=True)
 
         args = self.options
         pkg_files = {
