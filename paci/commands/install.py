@@ -212,7 +212,7 @@ class Install(Base):
             desktop_file_dir = os.environ.get('HOME') + '/.local/share/applications'
             self.__create_desktop_file(desktop_file_dir, pkg_constants, pkg_files['DESKTOP'])
 
-        if pkg_files['CONF.tar.gz']:
+        if pkg_files['CONF.tar.gz']and not args['--no-config']:
             conf_dir = pkg_constants['pkg_src'] + '/CONF'
             self.__extract_tar_gz(conf_dir, pkg_files['CONF.tar.gz'])
             subprocess.check_output(
