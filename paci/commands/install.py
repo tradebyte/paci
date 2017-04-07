@@ -8,6 +8,7 @@ import hashlib
 import shutil
 import requests
 import subprocess
+import tarfile
 from jinja2 import Template
 from .base import Base
 from clint.textui import progress
@@ -130,6 +131,13 @@ class Install(Base):
         with open(desktop_file_dir + '/' + pkg_constants['pkg_name'] + '.desktop', 'w') as file:
             file.write(desktop_file)
 
+    @staticmethod
+    def __extract_sources(working_dir, file):
+        if file.endswith("tar.gz"):
+            tar = tarfile.open(file, "r:gz")
+            tar.extractall(working_dir)
+            tar.close()
+
     def run(self):
         settings_helper = Settings()
 
@@ -179,14 +187,15 @@ class Install(Base):
             'pkg_name': pkg_conf['name']
         }
 
-        if 'DESKTOP' in pkg_conf:
+        if 'sources' in pkg_conf:
             pkg_files['SOURCES.tar.gz'] = self.__download(
                 pkg_url + "/" + pkg_conf['sources'],
                 pkg_constants['pkg_src'],
                 pkg_conf['sha512sum']
             )
 
-        # TODO: Extract SOURCES.tar.gz
+        if pkg_files['SOURCES.tar.gz']:
+            self.__extract_sources(pkg_constants['pkg_src'] + '/SOURCES', pkg_files['SOURCES.tar.gz'])
 
         if pkg_files['GET.json']:
             self.__get_additional_files(pkg_files['GET.json'], pkg_constants['pkg_src'], pkg_constants)
