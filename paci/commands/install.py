@@ -26,14 +26,14 @@ class Install(Base):
         file_path = path + "/" + file
 
         if self.__url_exists(url):
-            print("Downloading " + file + "...")
-            print("Directory: " + file_path)
-
             # Process the download and show progress
             req = requests.get(url, stream=True)
             with open(file_path, 'wb') as f:
                 total_length = int(req.headers.get('content-length'))
-                for chunk in progress.bar(req.iter_content(chunk_size=1024), expected_size=(total_length / 1024) + 1):
+                for chunk in progress.bar(
+                        req.iter_content(chunk_size=1024),
+                        expected_size=(total_length / 1024) + 1,
+                        label=file + ': '):
                     if chunk:
                         f.write(chunk)
                         f.flush()
@@ -43,7 +43,6 @@ class Install(Base):
                     print(file + " could not be downloaded.")
                     exit(1)
 
-            print("Download: Successful \n")
             return file_path
         else:
             return False
@@ -160,11 +159,12 @@ class Install(Base):
         pkg_name = args['<package>']
         pkg_url = settings["paci"]["registry"]["main"] + "/" + pkg_name  # TODO: handle fallback repo
 
-        print("Package: " + pkg_name + "\n")
-
         # Create temporary package directory
         os.makedirs(settings["paci"]["temp"], exist_ok=True)
         pkg_temp_dir = tempfile.mkdtemp(dir=settings["paci"]["temp"], prefix=pkg_name + '_')
+
+        print("Package: " + pkg_name)
+        print("Package working directory: " + pkg_temp_dir + "\n")
 
         # Download RECIPE.yml
         pkg_recipe = self.__download(pkg_url + "/RECIPE.yml", pkg_temp_dir)
