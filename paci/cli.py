@@ -3,7 +3,7 @@
 paci
 
 Usage:
-  paci install [--no-config] [--debug] [--no-cleanup] <package>
+  paci install [--no-config] [--no-cleanup] <package>
   paci update [--no-config] <package>
   paci remove 
   paci hello
@@ -14,7 +14,6 @@ Options:
   -h, --help                         Show this screen.
   -v, --version                      Show version.
   -n, --no-config                    Omits the config.
-  -d, --debug                        Run in debug mode.
   -c, --no-cleanup                   Don't cleanup the mess.
 
 Examples:
