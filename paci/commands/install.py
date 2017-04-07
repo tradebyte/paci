@@ -19,7 +19,7 @@ from paci.helpers.settings import Settings
 class Install(Base):
     """Install!"""
 
-    def __download(self, url, path, sha512sum=None):
+    def __download(self, url, path, sha512sum=None, hidden=None):
         """Download a file, show the progress and do integrity checks."""
 
         file = url.split('/')[-1]
@@ -33,7 +33,8 @@ class Install(Base):
                 for chunk in progress.bar(
                         req.iter_content(chunk_size=1024),
                         expected_size=(total_length / 1024) + 1,
-                        label=file + ': '
+                        label=file + ': ',
+                        hide=hidden
                 ):
                     if chunk:
                         f.write(chunk)
@@ -164,16 +165,9 @@ class Install(Base):
         os.makedirs(settings["paci"]["temp"], exist_ok=True)
         pkg_temp_dir = tempfile.mkdtemp(dir=settings["paci"]["temp"], prefix=pkg_name + '_')
 
-        print("Package: " + pkg_name)
-        print("Package working directory: " + pkg_temp_dir + "\n")
-
         # Download RECIPE.yml
-        pkg_recipe = self.__download(pkg_url + "/RECIPE.yml", pkg_temp_dir)
+        pkg_recipe = self.__download(pkg_url + "/RECIPE.yml", pkg_temp_dir, hidden=True)
         pkg_conf = self.__get_pkg_conf(pkg_recipe)
-
-        # Download all meta files
-        for (file, path) in pkg_files.items():
-            pkg_files[file] = self.__download(pkg_url + "/" + file, pkg_temp_dir)
 
         # Create package directory
         pkg_dir = settings["paci"]["base"] + "/" + pkg_name + "_" + pkg_conf['version']
@@ -187,6 +181,14 @@ class Install(Base):
             'pkg_desc': pkg_conf['summary'],
             'pkg_name': pkg_conf['name']
         }
+
+        print("Package: " + pkg_constants['pkg_name'] + " (v" + pkg_constants['pkg_ver'] + ")")
+        print("Package working directory: " + pkg_temp_dir + "\n")
+        print("Downloading files...")
+
+        # Download all meta files
+        for (file, path) in pkg_files.items():
+            pkg_files[file] = self.__download(pkg_url + "/" + file, pkg_temp_dir)
 
         if 'sources' in pkg_conf:
             pkg_files['SOURCES.tar.gz'] = self.__download(
@@ -202,6 +204,7 @@ class Install(Base):
             self.__get_additional_files(pkg_files['GET.json'], pkg_constants['pkg_src'], pkg_constants)
 
         if pkg_files['INSTALL.sh']:
+            print("\nInstalling package...")
             self.__set_script_variables(pkg_constants)
             self.__execute_shell_script(pkg_files['INSTALL.sh'], pkg_constants['pkg_src'])
 
@@ -220,3 +223,8 @@ class Install(Base):
         # Cleanup if successful
         if not args['--no-cleanup']:
             shutil.rmtree(pkg_temp_dir)
+
+        print("\n" + pkg_constants['pkg_name']
+              + " (v" + pkg_constants['pkg_ver'] + ")"
+              + " successfully installed!"
+              )
