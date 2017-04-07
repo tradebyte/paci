@@ -213,7 +213,7 @@ class Install(Base):
             conf_dir = pkg_constants['pkg_src'] + '/CONF'
             self.__extract_tar_gz(conf_dir, pkg_files['CONF.tar.gz'])
             subprocess.check_output(
-                "rsync -rt --ignore-existing " + conf_dir + "/ " + os.environ.get('HOME'),
+                ['bash', '-c', "rsync -rt --ignore-existing " + conf_dir + "/ " + os.environ.get('HOME')],
                 cwd=pkg_constants['pkg_src']
             )
 
