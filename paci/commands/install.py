@@ -33,7 +33,8 @@ class Install(Base):
                 for chunk in progress.bar(
                         req.iter_content(chunk_size=1024),
                         expected_size=(total_length / 1024) + 1,
-                        label=file + ': '):
+                        label=file + ': '
+                ):
                     if chunk:
                         f.write(chunk)
                         f.flush()
@@ -131,7 +132,7 @@ class Install(Base):
             file.write(desktop_file)
 
     @staticmethod
-    def __extract_sources(working_dir, file):
+    def __extract_tar_gz(working_dir, file):
         if file.endswith("tar.gz"):
             tar = tarfile.open(file, "r:gz")
             tar.extractall(working_dir)
@@ -195,7 +196,7 @@ class Install(Base):
             )
 
         if pkg_files['SOURCES.tar.gz']:
-            self.__extract_sources(pkg_constants['pkg_src'] + '/SOURCES', pkg_files['SOURCES.tar.gz'])
+            self.__extract_tar_gz(pkg_constants['pkg_src'] + '/SOURCES', pkg_files['SOURCES.tar.gz'])
 
         if pkg_files['GET.json']:
             self.__get_additional_files(pkg_files['GET.json'], pkg_constants['pkg_src'], pkg_constants)
@@ -208,7 +209,13 @@ class Install(Base):
             desktop_file_dir = os.environ.get('HOME') + '/.local/share/applications'
             self.__create_desktop_file(desktop_file_dir, pkg_constants, pkg_files['DESKTOP'])
 
-        # TODO: Extract CONF.tar.gz
+        if pkg_files['CONF.tar.gz']:
+            conf_dir = pkg_constants['pkg_src'] + '/CONF'
+            self.__extract_tar_gz(conf_dir, pkg_files['CONF.tar.gz'])
+            subprocess.check_output(
+                "rsync -rt --ignore-existing " + conf_dir + "/ " + os.environ.get('HOME'),
+                cwd=pkg_constants['pkg_src']
+            )
 
         # Cleanup if successful
         if not args['--no-cleanup']:

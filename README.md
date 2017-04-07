@@ -13,6 +13,7 @@ __This is a work in progress. Do not use yet!__
 
 - python3
 - python3-venv
+- rsync
 
 ## Setup
 
