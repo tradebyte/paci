@@ -9,6 +9,7 @@ import shutil
 import requests
 import subprocess
 import tarfile
+from tinydb import TinyDB, Query
 from jinja2 import Template
 from .base import Base
 from clint.textui import progress
@@ -224,7 +225,17 @@ class Install(Base):
         if not args['--no-cleanup']:
             shutil.rmtree(pkg_temp_dir)
 
-        print("\n" + pkg_constants['pkg_name']
+        # TODO: add installed software to the internal list of installed packages (https://pypi.python.org/pypi/tinydb)
+        # TODO: no dubplicate entry
+        db = TinyDB(settings["paci"]["index"])
+        db.insert({'pkg_name': pkg_constants['pkg_name'],
+                   'pkg_ver': pkg_constants['pkg_ver'],
+                   'pkg_desc': pkg_constants['pkg_desc']
+                   })
+        print(db.all)
+
+        print("\n"
+              + pkg_constants['pkg_name']
               + " (v" + pkg_constants['pkg_ver'] + ")"
               + " successfully installed!"
               )

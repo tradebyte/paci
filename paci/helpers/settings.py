@@ -18,6 +18,7 @@ class Settings(object):
         self.defaults = {
             "paci": {
                 "temp": "/tmp/paci",
+                "index": os.environ.get('HOME') + '/.paci/index.json',
                 "base": os.environ.get('HOME') + '/.paci/apps',
                 "registry": {
                     "main": "https://raw.githubusercontent.com/tradebyte/paci_packages/master",
