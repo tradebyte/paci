@@ -9,6 +9,7 @@ from paci.commands.configure import Configure
 
 doc = paci.__doc__
 
+
 class TestConfigure(unittest.TestCase):
 
     def test_prints_the_welcome_msg(self):

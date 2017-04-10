@@ -7,7 +7,7 @@ from paci.helpers.settings import Settings
 
 settings_data_defaults = """paci:
     temp: /tmp/paci
-    base: ~/.paci/
+    base: ~/.paci
     registry:
         main: https://raw.githubusercontent.com/tradebyte/paci_packages/master
         fallback: https://raw.githubusercontent.com/tradebyte/paci_packages/master
@@ -16,15 +16,15 @@ settings_data_defaults = """paci:
 settings_data_empty = """"""
 
 settings_data_changed = """paci:
-    temp: /custom/temp
-    base: /custom/base
+    temp: /tmp/temp
+    base: /tmp/base
     registry:
         main: https://custom.main.url
         fallback: https://custom.fallback.url
 """
 
 settings_data_changed_partial = """paci:
-    base: /custom/base
+    base: /tmp/base
     registry:
         fallback: https://custom.fallback.url
 """
@@ -36,11 +36,11 @@ class TestSettingsHelper(unittest.TestCase):
     def test_fetch_settings_file_defaults(self):
         """Fetching a file with default values should break nothing"""
         helper = Settings()
-        settings = helper.fetch_settings("/path/to/paci/settings.yml")
+        settings = helper.fetch_settings()
         expected = {
             "paci": {
                 "temp": "/tmp/paci",
-                "base": "~/.paci/",
+                "base": "~/.paci",
                 "registry": {
                     "main": "https://raw.githubusercontent.com/tradebyte/paci_packages/master",
                     "fallback": "https://raw.githubusercontent.com/tradebyte/paci_packages/master"
@@ -53,11 +53,11 @@ class TestSettingsHelper(unittest.TestCase):
     def test_fetch_settings_file_empty(self):
         """Fetching an empty file should break nothing"""
         helper = Settings()
-        settings = helper.fetch_settings("/path/to/paci/settings.yml")
+        settings = helper.fetch_settings()
         expected = {
             "paci": {
                 "temp": "/tmp/paci",
-                "base": os.environ.get('HOME') + '/.paci/apps',
+                "base": os.environ.get('HOME') + '/.paci',
                 "registry": {
                     "main": "https://raw.githubusercontent.com/tradebyte/paci_packages/master",
                     "fallback": "https://raw.githubusercontent.com/tradebyte/paci_packages/master"
@@ -70,11 +70,11 @@ class TestSettingsHelper(unittest.TestCase):
     def test_fetch_settings_file_changed(self):
         """Fetching a file with all values changed should result in settings without a default value"""
         helper = Settings()
-        settings = helper.fetch_settings("/path/to/paci/settings.yml")
+        settings = helper.fetch_settings()
         expected = {
             "paci": {
-                "temp": "/custom/temp",
-                "base": "/custom/base",
+                "temp": "/tmp/temp",
+                "base": "/tmp/base",
                 "registry": {
                     "main": "https://custom.main.url",
                     "fallback": "https://custom.fallback.url"
@@ -87,11 +87,11 @@ class TestSettingsHelper(unittest.TestCase):
     def test_fetch_settings_file_partial(self):
         """Fetching a file with partial values changed should result in settings without some default values"""
         helper = Settings()
-        settings = helper.fetch_settings("/path/to/paci/settings.yml")
+        settings = helper.fetch_settings()
         expected = {
             "paci": {
                 "temp": "/tmp/paci",
-                "base": "/custom/base",
+                "base": "/tmp/base",
                 "registry": {
                     "main": "https://raw.githubusercontent.com/tradebyte/paci_packages/master",
                     "fallback": "https://custom.fallback.url"
@@ -107,7 +107,7 @@ class TestSettingsHelper(unittest.TestCase):
         with patch("paci.helpers.settings.open", mock_open(read_data=settings_data_defaults)) as m:
             helper.fetch_settings()
 
-        expected_setting_path = os.environ.get('HOME') + '/.paci/config/settings.yml'
+        expected_setting_path = os.environ.get('HOME') + '/.config/paci/settings.yml'
         m.assert_called_once_with(expected_setting_path, 'r')
 
     def test_write_settings(self):
@@ -128,8 +128,8 @@ class TestSettingsHelper(unittest.TestCase):
             with patch("paci.helpers.settings.open", mock_open(read_data=settings_data_defaults)) as m:
                 helper.write_settings(data=towrite)
 
-        expected_setting_path = os.environ.get('HOME') + '/.paci/config/settings.yml'
-        expected_setting_dir_path = os.environ.get('HOME') + '/.paci/config'
+        expected_setting_path = os.environ.get('HOME') + '/.config/paci/settings.yml'
+        expected_setting_dir_path = os.environ.get('HOME') + '/.config/paci'
         m_os.assert_called_once_with(expected_setting_dir_path, exist_ok=True)
         m.assert_called_once_with(expected_setting_path, 'w')
 
