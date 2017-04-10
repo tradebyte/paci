@@ -5,8 +5,8 @@ paci
 Usage:
   paci install [--no-config] [--no-cleanup] <package>
   paci update [--no-config] <package>
+  paci list
   paci remove 
-  paci hello
   paci configure
   paci --help
   paci --version
@@ -18,7 +18,6 @@ Options:
   -c, --no-cleanup                   Don't cleanup the mess.
 
 Examples:
-  paci hello
   paci install --no-config
 
 Help:
@@ -27,18 +26,15 @@ Help:
 """
 
 import better_exceptions
-
 from inspect import getmembers, isclass
-
 from docopt import docopt
-
-from . import __version__ as VERSION
+from . import __version__ as version
 
 
 def main():
     """Main CLI entry point."""
     import paci.commands
-    options = docopt(__doc__, version=VERSION)
+    options = docopt(__doc__, version=version)
 
     # Here we'll try to dynamically match the command the user is trying to run
     # with a pre-defined command class we've already created.
