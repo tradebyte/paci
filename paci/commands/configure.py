@@ -2,6 +2,7 @@
 
 from .base import Base
 
+
 class Configure(Base):
     """Creates a settings.yml for paci interactive with the user."""
 
