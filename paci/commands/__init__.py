@@ -1,4 +1,11 @@
-from .install import *
-from .configure import *
-from .update import *
-from .list import *
+from .install import Install
+from .configure import Configure
+from .update import Update
+from .list import List
+
+COMMANDS = {
+    'install': Install,
+    'configure': Configure,
+    'update': Update,
+    'list': List,
+}

@@ -1,7 +1,7 @@
 """The list command."""
 
 from .base import Base
-from paci.helpers.pkg_db import PkgDB
+from paci.helpers.pkg_index import PkgIndex
 from paci.helpers.settings import Settings
 
 
@@ -16,7 +16,7 @@ class List(Base):
             exit(0)
 
         settings = settings_helper.fetch_settings()
-        pkg_db = PkgDB(settings["paci"]["base"])
+        pkg_db = PkgIndex(settings["paci"]["base"])
 
         print("Installed packages: \n")
 

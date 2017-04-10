@@ -3,7 +3,7 @@
 from tinydb import *
 
 
-class PkgDB(object):
+class PkgIndex(object):
     """Helper for managing the packages index.json file"""
 
     def __init__(self, base):

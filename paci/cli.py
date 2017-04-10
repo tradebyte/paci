@@ -26,9 +26,9 @@ Help:
 """
 
 import better_exceptions
-from inspect import getmembers, isclass
 from docopt import docopt
 from . import __version__ as version
+from paci.commands import COMMANDS
 
 
 def main():
@@ -40,8 +40,6 @@ def main():
     # with a pre-defined command class we've already created.
     for (k, v) in options.items():
         if hasattr(paci.commands, k) and v:
-            module = getattr(paci.commands, k)
-            paci.commands = getmembers(module, isclass)
-            command = [command[1] for command in paci.commands if command[0] != 'Base'][0]
-            command = command(options)
+            command = COMMANDS[k](options)
             command.run()
+
