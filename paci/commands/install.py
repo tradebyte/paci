@@ -9,12 +9,12 @@ import shutil
 import requests
 import subprocess
 import tarfile
-from tinydb import TinyDB, Query
 from jinja2 import Template
 from .base import Base
 from clint.textui import progress
 from jsontraverse.parser import JsonTraverseParser
 from paci.helpers.settings import Settings
+from paci.helpers.pkg_db import PkgDB
 
 
 class Install(Base):
@@ -148,7 +148,7 @@ class Install(Base):
 
         settings = settings_helper.fetch_settings()
 
-        os.makedirs(settings["paci"]["base"], exist_ok=True)
+        pkg_db = PkgDB(settings["paci"]["base"])
 
         args = self.options
 
@@ -171,7 +171,7 @@ class Install(Base):
         pkg_conf = self.__get_pkg_conf(pkg_recipe)
 
         # Create package directory
-        pkg_dir = settings["paci"]["base"] + "/" + pkg_name + "_" + pkg_conf['version']
+        pkg_dir = settings["paci"]["base"] + "/apps/" + pkg_name + "_" + pkg_conf['version']
         os.makedirs(pkg_dir, exist_ok=True)
 
         # Create package constants (e.g. used for the templates)
@@ -225,14 +225,8 @@ class Install(Base):
         if not args['--no-cleanup']:
             shutil.rmtree(pkg_temp_dir)
 
-        # TODO: add installed software to the internal list of installed packages (https://pypi.python.org/pypi/tinydb)
-        # TODO: no dubplicate entry
-        db = TinyDB(settings["paci"]["index"])
-        db.insert({'pkg_name': pkg_constants['pkg_name'],
-                   'pkg_ver': pkg_constants['pkg_ver'],
-                   'pkg_desc': pkg_constants['pkg_desc']
-                   })
-        print(db.all)
+        # Add package to the installed packages list
+        pkg_db.add(pkg_constants)
 
         print("\n"
               + pkg_constants['pkg_name']
