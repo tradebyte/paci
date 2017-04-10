@@ -30,7 +30,7 @@ settings_data_changed_partial = """paci:
 """
 
 
-class TestHello(unittest.TestCase):
+class TestSettingsHelper(unittest.TestCase):
 
     @patch("paci.helpers.settings.open", mock_open(read_data=settings_data_defaults))
     def test_fetch_settings_file_defaults(self):

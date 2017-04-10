@@ -7,6 +7,7 @@ Usage:
   paci update [--no-config] <package>
   paci remove 
   paci hello
+  paci configure
   paci --help
   paci --version
 
