@@ -19,7 +19,8 @@ class Base(object):
             settings_helper.write_settings(settings_helper.defaults)
 
         self.settings = settings_helper.fetch_settings()
-        self.index = PkgIndex(self.settings["paci"]["base"])
+        self.index_path = self.settings["paci"]["base"] + "/pkgs.json"
+        self.index = PkgIndex(self.index_path)
 
     def run(self):
         raise NotImplementedError('You must implement the run() method yourself!')

@@ -6,21 +6,25 @@ from tinydb import *
 class PkgIndex(object):
     """Helper for managing the packages index.json file"""
 
-    def __init__(self, base):
+    def __init__(self, path):
         """Initializes the setting path and the default setting values."""
-        self.db = TinyDB(base + "/pkgs.json")
+        self.db = TinyDB(path)
 
-    def add(self, pkg):
+    def add(self, pkg, db=None):
         query = Query()
-        if not self.db.search(query.name == pkg['pkg_name']):
-            # Create
-            self.db.insert({'name': pkg['pkg_name'],
-                            'ver': pkg['pkg_ver'],
-                            'desc': pkg['pkg_desc']
-                            })
-        elif self.db.search((query.name == pkg['pkg_name']) & (query.ver != pkg['pkg_ver'])):
-            # Update
-            self.db.update(self.__update_record(pkg), query.name == pkg['pkg_name'])
+
+        if not db:
+            db = self.db
+
+        # Create
+        if not db.search(query.name == pkg['pkg_name']):
+            db.insert({'name': pkg['pkg_name'],
+                       'ver': pkg['pkg_ver'],
+                       'desc': pkg['pkg_desc']
+                       })
+        # Update
+        elif db.search((query.name == pkg['pkg_name']) & (query.ver != pkg['pkg_ver'])):
+            db.update(self.__update_record(pkg), query.name == pkg['pkg_name'])
 
     def get_installed(self):
         pkgs = [["Name", "Version", "Description"]]

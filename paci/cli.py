@@ -6,8 +6,9 @@ Usage:
   paci install [--no-config] [--no-cleanup] <package>
   paci update [--no-config] <package>
   paci list
-  paci remove 
+  paci remove
   paci configure
+  paci generate (repo-index <path> | pkg-index)
   paci --help
   paci --version
 
@@ -18,11 +19,11 @@ Options:
   -c, --no-cleanup                   Don't cleanup the mess.
 
 Examples:
-  paci install --no-config
+  paci install phpstorm
 
 Help:
   For help using this tool, please open an issue on the Github repository:
-  ~~TODO~~
+  https://github.com/tradebyte/paci
 """
 
 import better_exceptions
