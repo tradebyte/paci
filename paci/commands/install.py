@@ -5,7 +5,7 @@ import tempfile
 import os
 import shutil
 from .base import Base
-from paci.helpers import download_helper, file_helper, cmd_helper
+from paci.helpers import download_helper, file_helper, cmd_helper, cache_helper
 
 
 class Install(Base):
@@ -13,7 +13,13 @@ class Install(Base):
 
     def run(self):
         pkg_name = self.options["<package>"]
-        pkg_url = os.path.join(self.settings["paci"]["registry"]["main"], pkg_name)  # TODO: handle fallback repo
+        repo_url = cache_helper.get_pkg_url(pkg_name, self.settings["paci"]["registry"], self.repo_cache)
+
+        if repo_url:
+            pkg_url = os.path.join(repo_url, pkg_name)
+        else:
+            print("Error! Package not found!")
+            exit(1)
 
         pkg_files = {
             "GET.json": "",
@@ -77,14 +83,14 @@ class Install(Base):
             file_helper.extract_tar_gz(conf_dir, pkg_files["CONF.tar.gz"])
             cmd_helper.rsync(pkg_vars["pkg_src"], conf_dir, os.environ.get("HOME"))
 
+        # Add RECIPE.yml to the pkg
+        file_helper.safe_copy(pkg_recipe, pkg_dir)
+
         # Cleanup if successful
         if not self.options["--no-cleanup"]:
             shutil.rmtree(pkg_temp_dir)
 
         # Add package to the installed packages list
         self.index.add(pkg_vars)
-
-        # Add RECIPE.yml to the pkg
-        file_helper.safe_copy(pkg_recipe, pkg_dir)
 
         print("\n{} (v{}) successfully installed!".format(pkg_vars["pkg_name"], pkg_vars["pkg_ver"]))
