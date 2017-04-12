@@ -1,4 +1,4 @@
-"""Helper class to deal with downloads"""
+"""Helper to deal with downloads"""
 
 import os
 import subprocess
