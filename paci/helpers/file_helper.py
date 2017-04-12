@@ -1,6 +1,7 @@
 """Helper class to deal with downloads"""
 
 import os
+import shutil
 import tarfile
 import ruamel.yaml
 from jinja2 import Template
@@ -58,3 +59,8 @@ def safe_delete(file):
     if os.path.exists(file):
         os.remove(file)
 
+
+def safe_copy(src, dest):
+    """Safely copies a given file to the destination"""
+    os.makedirs(dest, exist_ok=True)
+    shutil.copy(src, dest)

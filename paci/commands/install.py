@@ -31,7 +31,7 @@ class Install(Base):
         pkg_conf = file_helper.get_pkg_conf(pkg_recipe)
 
         # Create package directory
-        pkg_dir = os.path.join(self.settings["paci"]["base"], "apps", "{}_{}".format(pkg_name, pkg_conf["version"]))
+        pkg_dir = os.path.join(self.base_pkg_dir, "{}_{}".format(pkg_name, pkg_conf["version"]))
         os.makedirs(pkg_dir, exist_ok=True)
 
         # Create package constants (e.g. used for the templates)
@@ -83,5 +83,8 @@ class Install(Base):
 
         # Add package to the installed packages list
         self.index.add(pkg_vars)
+
+        # Add RECIPE.yml to the pkg
+        file_helper.safe_copy(pkg_recipe, pkg_dir)
 
         print("\n{} (v{}) successfully installed!".format(pkg_vars["pkg_name"], pkg_vars["pkg_ver"]))
