@@ -7,6 +7,7 @@ class Configure(Base):
     """Creates a settings.yml for paci interactive with the user."""
 
     def run(self):
-        print("Lets configure a new settings.yml for paci!")
-        newarg = input("basedir (defaults to $HOME/.paci/: ")
-        print(newarg)
+        print("Not yet implemented!")
+        # print("Lets configure a new settings.yml for paci!")
+        # arg = input("basedir (defaults to $HOME/.paci/: ")
+        # print(arg)

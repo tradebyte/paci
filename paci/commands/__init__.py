@@ -3,6 +3,7 @@ from .configure import Configure
 from .update import Update
 from .list import List
 from .generate import Generate
+from .remove import Remove
 
 COMMANDS = {
     "install": Install,
@@ -10,4 +11,5 @@ COMMANDS = {
     "update": Update,
     "list": List,
     "generate": Generate,
+    "remove": Remove,
 }
