@@ -64,7 +64,7 @@ class Install(Base):
                 pkg_conf["sha512sum"]
             )
 
-        if pkg_files["SOURCES.tar.gz"]:
+        if "SOURCES.tar.gz" in pkg_files:
             file_helper.extract_tar_gz(os.path.join(pkg_vars["pkg_src"], "SOURCES"), pkg_files["SOURCES.tar.gz"])
 
         if pkg_files["GET.json"]:
