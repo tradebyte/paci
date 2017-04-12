@@ -30,7 +30,7 @@ def download(url, path, sha512sum=None, hidden=None, filename=None):
         # Verify that the download was successful
         if sha512sum is not None:
             if not verify_file(file_path, sha512sum):
-                print("{} could not be downloaded.".format(file))
+                print("{} could not be verified.".format(file))
                 exit(1)
 
         return file_path

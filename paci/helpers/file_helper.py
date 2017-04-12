@@ -13,11 +13,15 @@ def create_desktop_file(values, template):
 
     # Read the file
     with open(template, "r") as file:
-        desktop_file = Template(file.read()).render(values)
+        desktop_file_content = Template(file.read()).render(values)
 
     # Write the .desktop file
-    with open(os.path.join(app_dir, "{}.desktop".format(values["pkg_name"])), "w") as file:
-        file.write(desktop_file)
+    desktop_file = os.path.join(app_dir, "{}.desktop".format(values["pkg_name"]))
+    with open(desktop_file, "w") as file:
+        file.write(desktop_file_content)
+
+    # Make it executable
+    os.chmod(desktop_file, 0o755)
 
 
 def read_yaml(file):
