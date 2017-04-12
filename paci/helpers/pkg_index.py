@@ -8,8 +8,7 @@ class PkgIndex(object):
 
     def __init__(self, path):
         """Initializes the setting path and the default setting values."""
-        self.db_file = path
-        self.db = TinyDB(self.db_file)
+        self.db = TinyDB(path)
 
     def add(self, pkg):
         """Safely adds a new record to pkg index list."""

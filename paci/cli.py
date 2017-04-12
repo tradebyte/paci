@@ -5,6 +5,7 @@ paci
 Usage:
   paci install [--no-config] [--no-cleanup] <package>
   paci update [--no-config] <package>
+  paci refresh
   paci list
   paci remove
   paci configure

@@ -8,9 +8,9 @@ from jsontraverse.parser import JsonTraverseParser
 from jinja2 import Template
 
 
-def download(url, path, sha512sum=None, hidden=None):
+def download(url, path, sha512sum=None, hidden=None, filename=None):
     """Download a file, show the progress and do integrity checks."""
-    file = url.split("/")[-1]
+    file = filename if filename else url.split("/")[-1]
     file_path = os.path.join(path, file)
 
     if url_exists(url):

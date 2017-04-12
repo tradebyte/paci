@@ -21,7 +21,12 @@ class Base(object):
 
         self.settings = settings_helper.fetch_settings()
 
+        self.repo_cache = os.path.join(self.settings["paci"]["base"], "cache")
+        os.makedirs(self.repo_cache, exist_ok=True)
+
         self.base_pkg_dir = os.path.join(self.settings["paci"]["base"], "apps")
+        os.makedirs(self.base_pkg_dir, exist_ok=True)
+
         self.index_file = os.path.join(self.settings["paci"]["base"], "pkgs.json")
         self.index = PkgIndex(self.index_file)
 
