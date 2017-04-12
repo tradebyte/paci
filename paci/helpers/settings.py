@@ -10,11 +10,11 @@ class Settings(object):
     def __init__(self):
         """Initializes the setting path and the default setting values."""
         self.settings = {}
-        self.setting_path = os.environ.get('HOME') + '/.config/paci/settings.yml'
+        self.setting_path = os.path.join(os.environ.get("HOME"), ".config/paci/settings.yml")
         self.defaults = {
             "paci": {
                 "temp": "/tmp/paci",
-                "base": os.environ.get('HOME') + '/.paci',
+                "base": os.path.join(os.environ.get("HOME"), ".paci"),
                 "registry": {
                     "main": "https://raw.githubusercontent.com/tradebyte/paci_packages/master",
                     "fallback": "https://raw.githubusercontent.com/tradebyte/paci_packages/master"
@@ -27,13 +27,12 @@ class Settings(object):
             Reads config from a yaml file, using default values if a setting is not defined
             in the file and returns the resulting settings as a dict.
         """
-
-        with open(self.setting_path, 'r') as f:
+        with open(self.setting_path, "r") as f:
             try:
                 # Using defaults, overwriting it with data from the given path
                 settings_file = ruamel.yaml.load(f.read(), ruamel.yaml.RoundTripLoader)
             except TypeError:
-                print("Provided file '" + self.setting_path + "' is not a valid json file! Using default settings!")
+                print("Provided file "" + self.setting_path + "" is not a valid json file! Using default settings!")
                 return self.defaults
 
         if settings_file is None:
@@ -52,7 +51,7 @@ class Settings(object):
         """Writes the given data into the settings file"""
         os.makedirs(os.path.dirname(self.setting_path), exist_ok=True)
 
-        with open(self.setting_path, 'w') as f:
+        with open(self.setting_path, "w") as f:
             ruamel.yaml.dump(data, stream=f)
 
     def settings_exist(self):

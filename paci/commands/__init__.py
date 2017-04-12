@@ -5,9 +5,9 @@ from .list import List
 from .generate import Generate
 
 COMMANDS = {
-    'install': Install,
-    'configure': Configure,
-    'update': Update,
-    'list': List,
-    'generate': Generate,
+    "install": Install,
+    "configure": Configure,
+    "update": Update,
+    "list": List,
+    "generate": Generate,
 }

@@ -2,6 +2,7 @@
 
 import hashlib
 import requests
+import os
 from clint.textui import progress
 from jsontraverse.parser import JsonTraverseParser
 from jinja2 import Template
@@ -9,19 +10,18 @@ from jinja2 import Template
 
 def download(url, path, sha512sum=None, hidden=None):
     """Download a file, show the progress and do integrity checks."""
-
-    file = url.split('/')[-1]
-    file_path = path + "/" + file
+    file = url.split("/")[-1]
+    file_path = os.path.join(path, file)
 
     if url_exists(url):
         # Process the download and show progress
         req = requests.get(url, stream=True)
-        with open(file_path, 'wb') as f:
-            total_length = int(req.headers.get('content-length'))
+        with open(file_path, "wb") as f:
+            total_length = int(req.headers.get("content-length"))
             for chunk in progress.bar(
                     req.iter_content(chunk_size=1024),
                     expected_size=(total_length / 1024) + 1,
-                    label=file + ': ',
+                    label="{}: ".format(file),
                     hide=hidden
             ):
                 if chunk:
@@ -30,7 +30,7 @@ def download(url, path, sha512sum=None, hidden=None):
         # Verify that the download was successful
         if sha512sum is not None:
             if not verify_file(file_path, sha512sum):
-                print(file + " could not be downloaded.")
+                print("{} could not be downloaded.".format(file))
                 exit(1)
 
         return file_path
@@ -40,15 +40,14 @@ def download(url, path, sha512sum=None, hidden=None):
 
 def download_get_files(file, pkg_src, constants):
     """Download all files from the GET.json."""
-
-    with open(file, 'r') as get_file:
+    with open(file, "r") as get_file:
         parser = JsonTraverseParser(get_file.read())
         files = parser.traverse("get")
 
         # work through all downloads
         for file in files:
-            url = Template(file['source']).render(constants)
-            sha512sum = file['sha512sum']
+            url = Template(file["source"]).render(constants)
+            sha512sum = file["sha512sum"]
             download(url, pkg_src, sha512sum)
 
 
@@ -65,10 +64,10 @@ def verify_file(file, sha512sum):
     h = hashlib.sha512()
 
     # open file for reading in binary mode
-    with open(file, 'rb') as file:
+    with open(file, "rb") as file:
         # loop till the end of the file
         chunk = 0
-        while chunk != b'':
+        while chunk != b"":
             # read only 1024 bytes at a time
             chunk = file.read(1024)
             h.update(chunk)

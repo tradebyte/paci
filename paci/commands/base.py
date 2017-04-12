@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """The base command."""
 
+import os
 from paci.helpers.settings import Settings
 from paci.helpers.pkg_index import PkgIndex
 
@@ -19,8 +20,8 @@ class Base(object):
             settings_helper.write_settings(settings_helper.defaults)
 
         self.settings = settings_helper.fetch_settings()
-        self.index_path = self.settings["paci"]["base"] + "/pkgs.json"
+        self.index_path = os.path.join(self.settings["paci"]["base"], "pkgs.json")
         self.index = PkgIndex(self.index_path)
 
     def run(self):
-        raise NotImplementedError('You must implement the run() method yourself!')
+        raise NotImplementedError("You must implement the run() method yourself!")
