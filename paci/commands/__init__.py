@@ -5,6 +5,7 @@ from .list import List
 from .generate import Generate
 from .remove import Remove
 from .refresh import Refresh
+from .search import Search
 
 COMMANDS = {
     "install": Install,
@@ -14,4 +15,5 @@ COMMANDS = {
     "generate": Generate,
     "remove": Remove,
     "refresh": Refresh,
+    "search": Search,
 }
