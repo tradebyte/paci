@@ -1,4 +1,4 @@
-"""Helper class to deal with the index.json"""
+"""Helper to deal with the index.json"""
 
 from tinydb import *
 
@@ -26,7 +26,7 @@ class PkgIndex(object):
 
     def get_installed(self):
         """Gets a list of installed packages."""
-        pkgs = [["Name", "Version", "Description"]]
+        pkgs = []
         for pkg in self.db.all():
             pkgs.append([pkg["name"], pkg["ver"], pkg["desc"]])
         return pkgs

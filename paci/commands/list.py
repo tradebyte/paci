@@ -1,26 +1,18 @@
 """The list command."""
 
+import os
 from .base import Base
-from paci.helpers.pkg_index import PkgIndex
-from paci.helpers.settings import Settings
+from paci.helpers import display_helper
 
 
 class List(Base):
     """Lists all installed packages!"""
 
     def run(self):
-        settings_helper = Settings()
 
-        if settings_helper.settings_exist() is False:
+        if not os.path.exists(self.index_file):
             print("No packages installed yet!")
-            exit(0)
+            exit(1)
 
-        settings = settings_helper.fetch_settings()
-        pkg_db = PkgIndex(settings["paci"]["base"])
+        display_helper.print_list(["Name", "Version", "Description"], self.index.get_installed())
 
-        print("Installed packages: \n")
-
-        packages = pkg_db.get_installed()
-        col_width = max(len(word) for pkg in packages for word in pkg) + 2
-        for pkg in packages:
-            print("".join(word.ljust(col_width) for word in pkg))
