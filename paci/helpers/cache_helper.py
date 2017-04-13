@@ -13,11 +13,10 @@ def find_pkg(name, repo_list, cache_path):
             res = db.search(Query().name == name)
             if res:
                 return [[res[0]["name"], res[0]["ver"], res[0]["desc"], repo]]
-            else:
-                return None
         else:
             print("Error! No cache found! Please use `paci refresh` first!")
             exit(1)
+    return None
 
 
 def get_pkg_url(name, repo_list, cache_path):
