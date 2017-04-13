@@ -30,11 +30,37 @@ $ make
 These are the planned commands.
 
 ```
-   install   Installs a package.
-   update    Updates a package.
-   remove    Removes a package.
-   list      Lists all installed packages.
-   search    Searches for a package.
+ ❯ paci --help
+paci
+
+Usage:
+  paci install [--no-config] [--no-cleanup] [--reuse] [--overwrite] <package>
+  paci update [--no-config] <package>
+  paci search <package>
+  paci refresh
+  paci list
+  paci remove
+  paci configure
+  paci generate (repo-index <path> | pkg-index)
+  paci --help
+  paci --version
+
+Options:
+  -h, --help                         Show this screen.
+  -v, --version                      Show version.
+  -n, --no-config                    Omits the config.
+  -c, --no-cleanup                   Don't cleanup the mess.
+  -o, --overwrite                    Overwrite the config.
+  -r, --reuse                        Reuse the downloaded files. 
+                                     (only possible with --no-cleanup)
+
+Examples:
+  paci install phpstorm
+
+Help:
+  For help using this tool, please open an issue on the Github repository:
+  https://github.com/tradebyte/paci
+
 ```
 
 
