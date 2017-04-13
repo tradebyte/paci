@@ -6,12 +6,12 @@
 
 Your friendly, lightweight and flexible package manager.
 
-It is a package manager with can be used to distribute your own packages.
-It is meant to install all packages in userland.
+It is a package manager which can be used to distribute your own packages.
+It is meant to install all packages in your userland.
 
-It currently targets Ubuntu 16.04.
+Please see [Limitations](#limitations)
 
-__This is a work in progress. Do not use yet!__
+__This is work in progress. Do not use yet!__
 
 ## Requirements
 
@@ -22,7 +22,7 @@ __This is a work in progress. Do not use yet!__
 ## Setup
 
 ```
-$ make
+❯ make
 ```
 
 ## Usage
@@ -30,7 +30,7 @@ $ make
 These are the planned commands.
 
 ```
- ❯ paci --help
+❯ paci --help
 paci
 
 Usage:
@@ -63,15 +63,20 @@ Help:
 
 ```
 
+## Limitations
+
+* It currently targets Ubuntu 16.04 only!
+* It is not usable yet.
+* It needs more packages.
+* It needs testing
+
 
 ## Some snippets
 
-
-- Install package: `$ pip install -e .[test]`
 - Run tests: `$ python setup.py test`
 - Activate virtualenv: `. env/bin/activate`
 - Deactivate virtualenv: `deactivate`
-- If you'd like to cut a new release of this CLI tool: `$ python setup.py sdist bdist_wheel`
+- New release of this CLI tool (pip): `$ python setup.py sdist bdist_wheel`
 
 
 ## Contributing
