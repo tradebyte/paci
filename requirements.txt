@@ -8,3 +8,4 @@ requests==2.13.0
 ipython==5.2.0
 jinja2==2.9.6
 tinydb==3.2.2
+tabulate==0.7.7
