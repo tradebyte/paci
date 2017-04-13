@@ -3,7 +3,7 @@
 paci
 
 Usage:
-  paci install [--no-config] [--no-cleanup] <package>
+  paci install [--no-config] [--no-cleanup] [--reuse] [--overwrite] <package>
   paci update [--no-config] <package>
   paci search <package>
   paci refresh
@@ -19,6 +19,9 @@ Options:
   -v, --version                      Show version.
   -n, --no-config                    Omits the config.
   -c, --no-cleanup                   Don't cleanup the mess.
+  -o, --overwrite                    Overwrite the config.
+  -r, --reuse                        Reuse the downloaded files. 
+                                     (only possible with --no-cleanup)
 
 Examples:
   paci install phpstorm

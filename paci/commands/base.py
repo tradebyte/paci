@@ -19,16 +19,17 @@ class Base(object):
         if settings_helper.settings_exist() is False:
             settings_helper.write_settings(settings_helper.defaults)
 
+        # Define global variables
         self.settings = settings_helper.fetch_settings()
-
         self.repo_cache = os.path.join(self.settings["paci"]["base"], "cache")
-        os.makedirs(self.repo_cache, exist_ok=True)
-
         self.base_pkg_dir = os.path.join(self.settings["paci"]["base"], "apps")
-        os.makedirs(self.base_pkg_dir, exist_ok=True)
-
         self.index_file = os.path.join(self.settings["paci"]["base"], "pkgs.json")
         self.index = PkgIndex(self.index_file)
+
+        # Ensure the directories are present
+        os.makedirs(self.repo_cache, exist_ok=True)
+        os.makedirs(self.base_pkg_dir, exist_ok=True)
+        os.makedirs(self.settings["paci"]["temp"], exist_ok=True)
 
     def run(self):
         raise NotImplementedError("You must implement the run() method yourself!")

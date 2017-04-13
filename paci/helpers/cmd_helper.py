@@ -16,9 +16,13 @@ def set_script_variables(values):
         os.environ[key] = value
 
 
-def rsync(wd, src, dest):
+def rsync(wd, src, dest, ignore_existing=True):
     """rsync 2 folders"""
-    subprocess.check_output(["bash", "-c", "rsync -rt --ignore-existing {}/ {}".format(src, dest)], cwd=wd)
+    if ignore_existing:
+        cmd = "rsync -rt --ignore-existing {}/ {}".format(src, dest)
+    else:
+        cmd = "rsync -rt {}/ {}".format(src, dest)
+    subprocess.check_output(["bash", "-c", cmd], cwd=wd)
 
 
 def execute(commands, working_dir):
