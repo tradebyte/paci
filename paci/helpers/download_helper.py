@@ -16,17 +16,24 @@ def download(url, path, sha512sum=None, hidden=None, filename=None):
     if url_exists(url):
         # Process the download and show progress
         req = requests.get(url, stream=True)
+        content_length = req.headers.get("Content-Length")
         with open(file_path, "wb") as f:
-            total_length = int(req.headers.get("content-length"))
-            for chunk in progress.bar(
-                    req.iter_content(chunk_size=1024),
-                    expected_size=(total_length / 1024) + 1,
-                    label="{}: ".format(file),
-                    hide=hidden
-            ):
-                if chunk:
-                    f.write(chunk)
-                    f.flush()
+            # Display mode
+            if content_length:
+                total_length = int(content_length)
+                for chunk in progress.bar(
+                        req.iter_content(chunk_size=1024),
+                        expected_size=(total_length / 1024) + 1,
+                        label="{}: ".format(file),
+                        hide=hidden
+                ):
+                    if chunk:
+                        f.write(chunk)
+                        f.flush()
+            # Fallback Mode
+            else:
+                f.write(requests.get(url).content)
+                print("{}: [################################] 1/1 - 00:00:00".format(file))
         # Verify that the download was successful
         if sha512sum is not None:
             if not verify_file(file_path, sha512sum):
