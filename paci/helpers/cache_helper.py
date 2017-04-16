@@ -2,21 +2,28 @@
 
 import os
 from tinydb import *
+from fuzzywuzzy import fuzz
 
 
 def find_pkg(name, repo_list, cache_path):
     """Find a package in the cached repo index files"""
+    found = []
     for repo in sorted(repo_list)[::-1]:
         file = os.path.join(cache_path, "{}.json".format(repo))
         if os.path.exists(file):
             db = TinyDB(file)
-            res = db.search(Query().name == name)
+            res = db.search(Query().name.test(fuzzy_contains, name))
             if res:
-                return [[res[0]["name"], res[0]["ver"], res[0]["desc"], repo]]
+                for entry in res:
+                    if entry not in found:
+                        found.append([entry["name"], entry["ver"], entry["desc"], repo])
         else:
             print("Error! No cache found! Please use `paci refresh` first!")
             exit(1)
-    return None
+    if found:
+        return found
+    else:
+        return None
 
 
 def get_pkg_url(name, repo_list, cache_path):
@@ -26,3 +33,8 @@ def get_pkg_url(name, repo_list, cache_path):
         return repo_list[res[0][3]]
     else:
         return None
+
+
+def fuzzy_contains(val, name):
+    """Fuzzy matches a string"""
+    return fuzz.ratio(name, val) >= 50
