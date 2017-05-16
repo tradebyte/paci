@@ -3,7 +3,7 @@
 paci
 
 Usage:
-  paci install [--no-config] [--no-cleanup] [--reuse] [--overwrite] <package>
+  paci install [--no-config] [--no-cleanup] [--reuse] [--overwrite] <package>...
   paci update [--no-config] <package>
   paci search <package>
   paci refresh
