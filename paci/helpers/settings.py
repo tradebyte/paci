@@ -51,8 +51,11 @@ class Settings(object):
         """Writes the given data into the settings file"""
         os.makedirs(os.path.dirname(self.setting_path), exist_ok=True)
 
-        with open(self.setting_path, "w") as f:
-            ruamel.yaml.dump(data, stream=f)
+        try:
+            with open(self.setting_path, "w") as f:
+                ruamel.yaml.dump(data, stream=f)
+        except IOError as e:
+            print("Couldn't open or write to file (%s)." % e)
 
     def settings_exist(self):
         """Returns if a setting file exists already"""
