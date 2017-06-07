@@ -12,7 +12,7 @@ def find_pkg(name, repo_list, cache_path):
         file = os.path.join(cache_path, "{}.json".format(repo))
         if os.path.exists(file):
             db = TinyDB(file)
-            res = db.search(Query().name.test(fuzzy_contains, name))
+            res = db.search(Query().name.test(fuzzy_contains, ''.join(name)))
             if res:
                 for entry in res:
                     if entry not in found:

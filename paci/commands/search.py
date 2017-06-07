@@ -14,4 +14,3 @@ class Search(Base):
             display_helper.print_list(["Name", "Version", "Description", "Registry"], result)
         else:
             print("Package not found.")
-
