@@ -32,7 +32,7 @@ class Settings(object):
                 # Using defaults, overwriting it with data from the given path
                 settings_file = ruamel.yaml.load(f.read(), ruamel.yaml.RoundTripLoader)
             except TypeError:
-                print("Provided file "" + self.setting_path + "" is not a valid json file! Using default settings!")
+                print("Provided file {} is not a valid json file! Using default settings!".format(self.setting_path))
                 return self.defaults
 
         if settings_file is None:
