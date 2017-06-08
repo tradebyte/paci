@@ -1,6 +1,7 @@
 """Helper to deal with the index.json"""
 
 from tinydb import *
+from paci.helpers import std_helper
 
 
 class PkgIndex(object):
@@ -30,6 +31,9 @@ class PkgIndex(object):
         for pkg in self.db.all():
             pkgs.append([pkg["name"], pkg["ver"], pkg["desc"]])
         return pkgs
+
+    def get_pkg(self, pkg_name):
+        return self.db.search(where('name') == std_helper.stringify(pkg_name))
 
     @staticmethod
     def __update_record(pkg):
