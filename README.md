@@ -11,8 +11,6 @@ It is meant to install all packages in your userland.
 
 Please see [Limitations](#limitations)
 
-__This is work in progress. Do not use yet!__
-
 ## Requirements
 
 - python3
@@ -66,10 +64,8 @@ Help:
 ## Limitations
 
 * It currently targets Ubuntu 16.04 only!
-* It is not usable yet.
 * It needs more packages.
 * It needs testing
-
 
 ## Some snippets
 
