@@ -11,6 +11,20 @@ It is meant to install all packages in your userland.
 
 Please see [Limitations](#limitations)
 
+## Installation
+
+On Ubuntu 16.04:
+
+```bash
+pip3 install paci
+```
+
+After that you should add `$HOME/.local/bin` to your `$PATH` in your `~/.bashrc` file.
+
+```bash
+export PATH="$PATH:$HOME/.local/bin"
+```
+
 ## Requirements
 
 - python3
