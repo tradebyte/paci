@@ -1,10 +1,8 @@
 """Packaging settings."""
 
 from codecs import open
-from os.path import abspath, dirname, join
-from subprocess import call
-
-from setuptools import Command, find_packages, setup
+from os.path import abspath, dirname
+from setuptools import find_packages, setup
 
 from paci import __version__
 
@@ -14,37 +12,44 @@ with open("README.md") as f:
     readme = f.read()
 
 with open("LICENSE") as f:
-    license = f.read()
-
+    license_file = f.read()
 
 setup(
     name="paci",
     version=__version__,
     description="Your friendly, lightweight and flexible package manager.",
     long_description=readme,
-    url="http://gitlab.tradebyte-office.de/qa/paci",
+    url="https://github.com/tradebyte/paci",
     author="Niklas Heer",
     author_email="niklas.heer@tradebyte.com",
-    license=license,
+    license=license_file,
     classifiers=[
         "Intended Audience :: Developers",
-        "Topic :: Utilities",
-        "License :: Public Domain",
+        "License :: OSI Approved :: MIT License",
+        "Topic :: System :: Software Distribution",
         "Natural Language :: English",
-        "Operating System :: OS Independent",
+        "Operating System :: POSIX :: Linux",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.2",
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5"
     ],
-    keywords="cli",
-    packages=find_packages(exclude=["docs", "tests*"]),
-    install_requires=["docopt"],
-    extras_require={
-        "test": ["coverage", "pytest", "pytest-cov"],
-    },
-    setup_requires=["pytest-runner"],
-    tests_require=["pytest"],
+    keywords=["cli", "package-manager", "install", "linux", "ubuntu"],
+    packages=find_packages(exclude=["docs", "tests*", "media"]),
+    install_requires=[
+        "docopt",
+        "better_exceptions",
+        "ruamel.yaml",
+        "json-traverse",
+        "clint",
+        "requests",
+        "jinja2",
+        "tinydb",
+        "tabulate",
+        "fuzzywuzzy",
+        "python-Levenshtein"
+    ],
     entry_points={
         "console_scripts": [
             "paci=paci.cli:main",
