@@ -20,6 +20,12 @@ Make sure the tests pass:
 python setup.py test
 ```
 
+Make sure you get an __10.00__ score from `pylint`:
+
+``` bash
+pylint paci
+```
+
 Make your change, with new passing tests. Follow the [style guide][style].
 
   [style]: https://www.python.org/dev/peps/pep-0008/

@@ -72,6 +72,7 @@ Help:
 - Run tests: `$ python setup.py test`
 - Activate virtualenv: `. env/bin/activate`
 - Deactivate virtualenv: `deactivate`
+- Run the linter: `pylint paci`
 - New release of this CLI tool (pip): `$ python setup.py sdist bdist_wheel`
 
 
