@@ -1,3 +1,5 @@
+"""Initialize all commands which are usable in paci."""
+
 from .install import Install
 from .configure import Configure
 from .update import Update

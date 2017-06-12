@@ -1,9 +1,9 @@
 """The generate command."""
 
 import os
-from .base import Base
 from paci.helpers import file_helper
 from paci.helpers.pkg_index import PkgIndex
+from .base import Base
 
 
 class Generate(Base):
@@ -36,7 +36,7 @@ class Generate(Base):
                 exit(1)
 
     @staticmethod
-    def generate_index(db, path):
+    def generate_index(index_db, path):
         """Generates an index file from the folders in the path."""
         pkg_count = 0
 
@@ -46,7 +46,7 @@ class Generate(Base):
 
             if "RECIPE.yml" in files:
                 pkg_conf = file_helper.get_pkg_conf(os.path.join(root, "RECIPE.yml"))
-                db.add({
+                index_db.add({
                     "pkg_ver": pkg_conf["version"],
                     "pkg_desc": pkg_conf["summary"],
                     "pkg_name": pkg_conf["name"]

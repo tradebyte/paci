@@ -1,8 +1,8 @@
 """The list command."""
 
 import os
-from .base import Base
 from paci.helpers import display_helper
+from .base import Base
 
 
 class List(Base):
@@ -15,4 +15,3 @@ class List(Base):
             exit(1)
 
         display_helper.print_list(["Name", "Version", "Description"], self.index.get_installed())
-

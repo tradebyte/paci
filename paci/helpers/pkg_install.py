@@ -9,16 +9,27 @@ from paci.helpers import download_helper, file_helper, cmd_helper, cache_helper
 class PkgInstall(object):
     """Helper for managing the installation of packages"""
 
-    def __init__(self, settings, options, index, repo_cache):
+    def __init__(self, settings, options, index, repo_cache, update=False):
         """Initializes the default settings."""
         self.settings = settings
         self.options = options
         self.index = index
         self.repo_cache = repo_cache
+        self.update = update
 
-    def install(self, pkg_files, pkg_name, base_pkg_dir):
+    def install(self, pkg_name, base_pkg_dir):
         """Main function to walk through the installation."""
         repo_url = cache_helper.get_pkg_url(pkg_name, self.settings["paci"]["registry"], self.repo_cache)
+
+        pkg_files = {
+            "GET.json": "",
+            "INSTALL.sh": "",
+            "DESKTOP": "",
+            "CONF.tar.gz": "",
+        }
+
+        if self.update:
+            pkg_files.update({"UPDATE.sh": ""})
 
         if repo_url:
             pkg_url = os.path.join(repo_url, pkg_name)
@@ -43,6 +54,8 @@ class PkgInstall(object):
                 pkg_temp_dir = tempfile.mkdtemp(dir=self.settings["paci"]["temp"], prefix=pkg_name + "_")
 
                 # Download RECIPE.yml
+                # pylint: disable=redefined-variable-type
+                # no error
                 pkg_recipe = download_helper.download(os.path.join(pkg_url, "RECIPE.yml"), pkg_temp_dir, hidden=True)
 
             ################################
@@ -92,13 +105,13 @@ class PkgInstall(object):
         if self.options["--reuse"]:
             print("Reusing files...")
             # Provide path to all files needed
-            for (file, path) in pkg_files.items():
+            for (file, _) in pkg_files.items():
                 pkg_files[file] = os.path.join(pkg_temp_dir, file)
         else:
             print("Downloading files...")
 
             # Download all meta files
-            for (file, path) in pkg_files.items():
+            for (file, _) in pkg_files.items():
                 pkg_files[file] = download_helper.download(os.path.join(pkg_url, file), pkg_temp_dir)
 
             if "sources" in pkg_conf:

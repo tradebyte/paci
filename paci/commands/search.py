@@ -1,7 +1,7 @@
 """The search command."""
 
-from .base import Base
 from paci.helpers import display_helper, cache_helper
+from .base import Base
 
 
 class Search(Base):

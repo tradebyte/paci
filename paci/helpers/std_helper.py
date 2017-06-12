@@ -2,7 +2,9 @@
 
 
 def stringify(obj):
-    if type(obj) is list:
+    """Helper method which converts any given object into a string."""
+
+    if isinstance(obj, list):
         return ''.join(obj)
     else:
         return str(obj)

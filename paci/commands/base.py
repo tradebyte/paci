@@ -10,6 +10,8 @@ class Base(object):
     """A base command."""
 
     def __init__(self, options, *args, **kwargs):
+        """Initialize the all globally available constants."""
+
         self.options = options
         self.args = args
         self.kwargs = kwargs
@@ -33,4 +35,5 @@ class Base(object):
             os.makedirs(self.settings["paci"]["temp"], exist_ok=True)
 
     def run(self):
+        """Acts as an interface for all commands. This is where your logic goes."""
         raise NotImplementedError("You must implement the run() method yourself!")

@@ -1,9 +1,9 @@
 """The configure command lets you define a settings.yml for paci."""
 
 import os
-from .base import Base
-from paci.helpers.settings import Settings
 from paci.helpers import display_helper
+from paci.helpers.settings import Settings
+from .base import Base
 
 
 class Configure(Base):

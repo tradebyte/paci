@@ -1,7 +1,7 @@
 """Helper class to deal with the settings.yml"""
 
-import ruamel.yaml
 import os
+import ruamel.yaml
 
 
 class Settings(object):
@@ -27,10 +27,10 @@ class Settings(object):
             Reads config from a yaml file, using default values if a setting is not defined
             in the file and returns the resulting settings as a dict.
         """
-        with open(self.setting_path, "r") as f:
+        with open(self.setting_path, "r") as file:
             try:
                 # Using defaults, overwriting it with data from the given path
-                settings_file = ruamel.yaml.load(f.read(), ruamel.yaml.RoundTripLoader)
+                settings_file = ruamel.yaml.load(file.read(), ruamel.yaml.RoundTripLoader)
             except TypeError:
                 print("Provided file {} is not a valid json file! Using default settings!".format(self.setting_path))
                 return self.defaults
@@ -52,10 +52,10 @@ class Settings(object):
         os.makedirs(os.path.dirname(self.setting_path), exist_ok=True)
 
         try:
-            with open(self.setting_path, "w") as f:
-                ruamel.yaml.dump(data, stream=f)
-        except IOError as e:
-            print("Couldn't open or write to file (%s)." % e)
+            with open(self.setting_path, "w") as file:
+                ruamel.yaml.dump(data, stream=file)
+        except IOError as exception:
+            print("Couldn't open or write to file (%s)." % exception)
 
     def settings_exist(self):
         """Returns if a setting file exists already"""

@@ -1,8 +1,8 @@
 """Helper to deal with downloads"""
 
+import os
 import hashlib
 import requests
-import os
 from clint.textui import progress
 from jsontraverse.parser import JsonTraverseParser
 from jinja2 import Template
@@ -17,7 +17,7 @@ def download(url, path, sha512sum=None, hidden=None, filename=None):
         # Process the download and show progress
         req = requests.get(url, stream=True)
         content_length = req.headers.get("Content-Length")
-        with open(file_path, "wb") as f:
+        with open(file_path, "wb") as file_stream:
             # Display mode
             if content_length:
                 total_length = int(content_length)
@@ -28,11 +28,11 @@ def download(url, path, sha512sum=None, hidden=None, filename=None):
                         hide=hidden
                 ):
                     if chunk:
-                        f.write(chunk)
-                        f.flush()
+                        file_stream.write(chunk)
+                        file_stream.flush()
             # Fallback Mode
             else:
-                f.write(requests.get(url).content)
+                file_stream.write(requests.get(url).content)
                 print("{}: [################################] 1/1 - 00:00:00".format(file))
         # Verify that the download was successful
         if sha512sum is not None:
@@ -68,7 +68,7 @@ def verify_file(file, sha512sum):
     """"Returns if a file is corrupted or not."""
 
     # make a hash object
-    h = hashlib.sha512()
+    hash_checker = hashlib.sha512()
 
     # open file for reading in binary mode
     with open(file, "rb") as file:
@@ -77,7 +77,6 @@ def verify_file(file, sha512sum):
         while chunk != b"":
             # read only 1024 bytes at a time
             chunk = file.read(1024)
-            h.update(chunk)
+            hash_checker.update(chunk)
 
-    return h.hexdigest() == sha512sum
-
+    return hash_checker.hexdigest() == sha512sum

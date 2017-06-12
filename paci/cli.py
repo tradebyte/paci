@@ -31,10 +31,9 @@ Help:
   https://github.com/tradebyte/paci
 """
 
-import better_exceptions
 from docopt import docopt
-from . import __version__ as version
 from paci.commands import COMMANDS
+from . import __version__ as version
 
 
 def main():
@@ -44,8 +43,7 @@ def main():
 
     # Here we'll try to dynamically match the command the user is trying to run
     # with a pre-defined command class we've already created.
-    for (k, v) in options.items():
-        if hasattr(paci.commands, k) and v:
-            command = COMMANDS[k](options)
+    for (key, val) in options.items():
+        if hasattr(paci.commands, key) and val:
+            command = COMMANDS[key](options)
             command.run()
-

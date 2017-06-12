@@ -1,6 +1,6 @@
 """Helper to output stuff"""
 
-from tabulate import *
+from tabulate import tabulate
 
 
 def print_list(header, entries):
@@ -9,4 +9,5 @@ def print_list(header, entries):
 
 
 def std_input(text, default):
+    """Get input or return default if none is given."""
     return input(text.format(default)) or default

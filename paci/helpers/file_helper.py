@@ -27,8 +27,8 @@ def create_desktop_file(values, template):
 def read_yaml(file):
     """Read a YAML file and return its contents as a dict."""
     if os.path.exists(file):
-        with open(file, "r") as f:
-            return ruamel.yaml.load(f.read(), ruamel.yaml.RoundTripLoader)
+        with open(file, "r") as file:
+            return ruamel.yaml.load(file.read(), ruamel.yaml.RoundTripLoader)
     else:
         file(file, "w").close()
         return False

@@ -1,8 +1,8 @@
 """The refresh command."""
 
 import os
-from .base import Base
 from paci.helpers import download_helper
+from .base import Base
 
 
 class Refresh(Base):

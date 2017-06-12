@@ -1,7 +1,7 @@
 """Helper to deal with the repo cache"""
 
 import os
-from tinydb import *
+from tinydb import TinyDB, Query
 from fuzzywuzzy import fuzz
 from paci.helpers import std_helper
 
@@ -12,8 +12,8 @@ def find_pkg(name, repo_list, cache_path):
     for repo in sorted(repo_list)[::-1]:
         file = os.path.join(cache_path, "{}.json".format(repo))
         if os.path.exists(file):
-            db = TinyDB(file)
-            res = db.search(Query().name.test(fuzzy_contains, std_helper.stringify(name)))
+            cache_db = TinyDB(file)
+            res = cache_db.search(Query().name.test(fuzzy_contains, std_helper.stringify(name)))
             if res:
                 for entry in res:
                     if entry not in found:
