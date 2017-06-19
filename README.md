@@ -79,7 +79,8 @@ Help:
 
 * It currently targets Ubuntu 16.04 only!
 * It needs more packages.
-* It needs testing
+* It needs testing.
+* It only supports 64bit systems.
 
 ## Some snippets
 
