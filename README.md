@@ -96,7 +96,7 @@ Help:
 See the [CONTRIBUTING] document.<br/>
 Thank you, [contributors]!
 
-  [CONTRIBUTING]: CONTRIBUTING.md
+  [CONTRIBUTING]: .github/CONTRIBUTING.md
   [contributors]: https://github.com/tradebyte/paci/graphs/contributors
 
 ## License
