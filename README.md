@@ -13,6 +13,14 @@ Please see [Limitations](#limitations)
 
 ## Installation
 
+### Via script
+
+```
+curl -s https://raw.githubusercontent.com/tradebyte/paci/master/.github/bin/install.sh | bash
+```
+
+### Manually
+
 On Ubuntu 16.04:
 
 ```bash
