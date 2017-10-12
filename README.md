@@ -1,4 +1,4 @@
-![paci](https://raw.github.com/tradebyte/paci/master/media/paci-logo.png "Your agents are standing by.Your friendly, lightweight and flexible package manager.")
+![paci](https://raw.github.com/tradebyte/paci/master/.github/images/paci-logo.png "Your agents are standing by.Your friendly, lightweight and flexible package manager.")
 
 -----
 
