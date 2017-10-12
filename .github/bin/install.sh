@@ -97,6 +97,7 @@ main() {
         YELLOW=""
         BLUE=""
         BOLD=""
+        LINE=""
         NORMAL=""
     fi
 
