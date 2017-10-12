@@ -37,7 +37,7 @@ setup(
         "Programming Language :: Python :: 3.5"
     ],
     keywords=["cli", "package-manager", "install", "linux", "ubuntu"],
-    packages=find_packages(exclude=["docs", "tests*", "media"]),
+    packages=find_packages(exclude=["docs", "tests*"]),
     install_requires=[
         "docopt",
         "better_exceptions",

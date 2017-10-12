@@ -9,5 +9,6 @@ prune build
 prune dist
 recursive-exclude *.egg-info *
 recursive-include tests *
+recursive-exclude .github *
 include README.md
 include LICENSE
