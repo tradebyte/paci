@@ -172,6 +172,40 @@ main() {
         if [ -v $failed ]; then
             echo -e "  ${OK}${GREEN} The ${LINE}\$PATH${NORMAL}${GREEN} is set. ${BOLD}Everything ok!${NORMAL}"
         fi
+
+        # Step 4: Configure paci
+        echo -e "\n${INFO}${YELLOW} Configuring paci...${NORMAL}"
+        cmd_configure=(paci)
+        cmd_configure+=("configure")
+        if [ ! -f $HOME/.config/paci/settings.yml ]; then
+            # Ask if they want to use the defaults
+            read -p "  ${RETURN} Do you want to use the defaults (Y/n)? " yn
+            case $yn in
+                [Nn]) echo "" ;;
+                *)
+                    cmd_configure+=("--no-choice")
+                    cmd_configure+=("--silent")
+                    ;;
+            esac
+
+            # Use if set the main registry
+            if [ ! -z "$main_registry" ]; then
+                cmd_configure+=("--main-registry=$main_registry")
+            fi
+
+            # Use if set the fallback registry
+            if [ ! -z "$fallback_registry" ]; then
+                cmd_configure+=("--fallback-registry=$fallback_registry")
+            fi
+
+            # Actually run the paci configure command
+            "${cmd_configure[@]}"
+
+            echo -e "\n  ${OK} Configuration successful."
+        else
+            echo -e "  ${RETURN}${GREEN} Configuration already present. ${BOLD}Everything ok!${NORMAL}"
+        fi
+
     else
         echo "${ERR}${RED} You are running this script on an unsupported OS!${NORMAL}"
         echo ""
