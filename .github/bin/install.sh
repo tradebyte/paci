@@ -110,6 +110,12 @@ main() {
         BOLD="$(tput bold)"
         LINE="$(tput smul)"
         NORMAL="$(tput sgr0)"
+
+        # Define symbols to use
+        OK=$(printf "${GREEN}${BOLD}\xE2\x9C\x94${NORMAL}")
+        ERR=$(printf "${RED}${BOLD}\xE2\x9C\x97${NORMAL}")
+        INFO=$(printf "${BLUE}${BOLD}\xE2\x97\x8F${NORMAL}")
+        RETURN=$(printf "${BLUE}${BOLD}\xE2\x86\xAA${NORMAL}")
     else
         RED=""
         GREEN=""
@@ -118,16 +124,13 @@ main() {
         BOLD=""
         LINE=""
         NORMAL=""
+
+        # Fallback symbols
+        OK=$(printf "[ok]")
+        ERR=$(printf "[error]")
+        INFO=$(printf "[info]")
+        RETURN=""
     fi
-
-    OK=$(printf "${GREEN}${BOLD}\xE2\x9C\x94${NORMAL}")
-    ERR=$(printf "${RED}${BOLD}\xE2\x9C\x97${NORMAL}")
-    INFO=$(printf "${BLUE}${BOLD}\xE2\x97\x8F${NORMAL}")
-    RETURN=$(printf "${BLUE}${BOLD}\xE2\x86\xAA${NORMAL}")
-
-    # Only enable exit-on-error after the non-critical colorization stuff,
-    # which may fail on systems lacking tput or terminfo
-    set -e
 
     echo -e "${GREEN}${BOLD}Welcome to the paci installer.\n\n"
 
