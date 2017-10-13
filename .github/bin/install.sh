@@ -206,6 +206,15 @@ main() {
             echo -e "  ${RETURN}${GREEN} Configuration already present. ${BOLD}Everything ok!${NORMAL}"
         fi
 
+        # Step 5: Refresh paci registries
+        printf "\n${INFO}${YELLOW} Refreshing paci index...${NORMAL}"
+        (paci refresh >/dev/null 2>&1) &
+        spinner $!
+        if [ $? -eq 0 ]; then
+            echo -e "\n  ${OK} Everything up to date!"
+        else
+            echo -e "\n  ${ERR} Failed to update. Abort."
+        fi
     else
         echo "${ERR}${RED} You are running this script on an unsupported OS!${NORMAL}"
         echo ""
