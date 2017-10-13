@@ -201,7 +201,7 @@ main() {
             # Actually run the paci configure command
             "${cmd_configure[@]}"
 
-            echo -e "\n  ${OK} Configuration successful."
+            echo -e "  ${OK} Configuration successful."
         else
             echo -e "  ${RETURN}${GREEN} Configuration already present. ${BOLD}Everything ok!${NORMAL}"
         fi
