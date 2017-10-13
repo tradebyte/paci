@@ -9,7 +9,7 @@ Usage:
   paci refresh
   paci list
   paci remove
-  paci configure [--main-registry=<url>] [--fallback-registry=<url>]
+  paci configure [--no-choice] [--main-registry=<url>] [--fallback-registry=<url>]
   paci generate (repo-index <path> | pkg-index)
   paci --help
   paci --version
