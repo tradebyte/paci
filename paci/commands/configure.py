@@ -11,7 +11,9 @@ class Configure(Base):
     """Creates a settings.yml for paci interactive with the user."""
 
     def run(self):
-        print("Lets configure a new settings.yml for paci!\n")
+        if not self.options["--no-choice"] and self.options["--silent"]:
+            print("Lets configure a new settings.yml for paci!\n")
+
         settings_helper = Settings()
 
         # Get standard settings
@@ -26,7 +28,8 @@ class Configure(Base):
 
         if self.options["--no-choice"]:
             # Don't ask - use defaults
-            print("Using defaults.\n")
+            if not self.options["--silent"]:
+                print("Using defaults.\n")
 
             temp_dir = std_temp
             base_dir = std_base
@@ -51,7 +54,7 @@ class Configure(Base):
             }
         }
 
-        if self.options["--no-choice"]:
+        if self.options["--no-choice"] and not self.options["--silent"]:
             print(json.dumps(settings, indent=4))
 
         # Save the settings
