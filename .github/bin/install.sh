@@ -132,14 +132,8 @@ main() {
         RETURN=""
     fi
 
+    # Let's start
     echo -e "${GREEN}${BOLD}Welcome to the paci installer.\n\n"
-
-    # TODO:
-    # 0. Check System (Ubuntu)
-    # 1. Check requirements
-    # 2. Install via pip
-    # 3. Ensure paci is in $PATH
-    # 4. Setup (inkl. input param -> main/fallback)
 
     # Step 0: Determine if we have a compatible OS
     determine_os
