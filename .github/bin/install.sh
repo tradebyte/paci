@@ -2,7 +2,7 @@
 #
 # Description: This script installs the paci package manager.
 # Author: Niklas Heer (niklas.heer@tradebyte.com)
-# Version: 1.0.0 (2017-10-12)
+# Version: 1.1.0 (2017-10-13)
 
 spinner() {
     local pid=$1
