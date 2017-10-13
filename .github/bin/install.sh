@@ -81,12 +81,13 @@ check_dependencies() {
         done
 
         # Install missing packages
-        echo -e "\n${RETURN}${YELLOW} Installing missing packages...${NORMAL}"
-        (sudo apt-get -y install ${missing_pkgs[@]} >/dev/null 2>&1)
+        printf "\n${RETURN}${YELLOW} Installing missing packages...${NORMAL}"
+        (sudo apt-get -y install ${missing_pkgs[@]} >/dev/null 2>&1) &
+        spinner $!
         if [ $? -eq 0 ]; then
-            echo -e "  ${OK} All dependencies are now installed."
+            echo -e "\n  ${OK} All dependencies are now installed."
         else
-            echo -e "\n${ERR} Failed to install dependencies. Abort."
+            echo -e "\n  ${ERR} Failed to install dependencies. Abort."
         fi
     fi
 }
@@ -142,12 +143,13 @@ main() {
         check_dependencies "python3 python3-venv python3-pip rsync"
 
         # Step 2: Install via pip
-        echo -e "\n${INFO}${YELLOW} Installing paci via pip...${NORMAL}"
-        (pip3 install --upgrade paci >/dev/null 2>&1)
+        printf "\n${INFO}${YELLOW} Installing paci via pip...${NORMAL}"
+        (pip3 install --upgrade paci >/dev/null 2>&1) &
+        spinner $!
         if [ $? -eq 0 ]; then
-            echo -e "  ${OK} Installation successful."
+            echo -e "\n  ${OK} Installation successful."
         else
-            echo -e "\n${ERR} Failed installation. Abort."
+            echo -e "\n  ${ERR} Failed installation. Abort."
         fi
 
         # Step 3: Verify $PATH
