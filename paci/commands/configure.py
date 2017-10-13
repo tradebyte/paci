@@ -13,27 +13,33 @@ class Configure(Base):
         print("Lets configure a new settings.yml for paci!\n")
         settings_helper = Settings()
 
-        # get user input for all values
-        temp = display_helper.std_input("Enter directory to store temporary files ({}):\n",
-                                        settings_helper.defaults["paci"]["temp"])
-        base = display_helper.std_input("Enter file in which to save the package meta data ({}):\n",
-                                        settings_helper.defaults["paci"]["base"])
-        r_main = display_helper.std_input("Enter main registry url ({}):\n",
-                                          settings_helper.defaults["paci"]["registry"]["main"])
-        r_fallback = display_helper.std_input("Enter fallback registry url ({}):\n",
-                                              settings_helper.defaults["paci"]["registry"]["fallback"])
+        # Get standard settings
+        std_temp = settings_helper.defaults["paci"]["temp"]
+        std_base = settings_helper.defaults["paci"]["base"]
+        std_main = settings_helper.defaults["paci"]["registry"]["main"]
+        std_fallback = settings_helper.defaults["paci"]["registry"]["fallback"]
 
-        # create settings dict
+        # Handle parameters
+        def_main = std_main if not self.options["--main-registry"] else self.options["--main-registry"]
+        def_fallback = std_fallback if not self.options["--fallback-registry"] else self.options["--fallback-registry"]
+
+        # Get user input for all values
+        temp_dir = display_helper.std_input("Enter directory to store temporary files ({}):\n", std_temp)
+        base_dir = display_helper.std_input("Enter file in which to save the package meta data ({}):\n", std_base)
+        main_registry = display_helper.std_input("Enter main registry url ({}):\n", def_main)
+        fallback_registry = display_helper.std_input("Enter fallback registry url ({}):\n", def_fallback)
+
+        # Create settings dict
         settings = {
             "paci": {
-                "temp": os.path.abspath(os.path.expanduser(temp)),
-                "base": os.path.abspath(os.path.expanduser(base)),
+                "temp": os.path.abspath(os.path.expanduser(temp_dir)),
+                "base": os.path.abspath(os.path.expanduser(base_dir)),
                 "registry": {
-                    "main": r_main,
-                    "fallback": r_fallback
+                    "main": main_registry,
+                    "fallback": fallback_registry
                 }
             }
         }
 
-        # save the settings
+        # Save the settings
         settings_helper.write_settings(settings)
