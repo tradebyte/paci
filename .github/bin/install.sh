@@ -4,6 +4,20 @@
 # Author: Niklas Heer (niklas.heer@tradebyte.com)
 # Version: 1.0.0 (2017-10-12)
 
+spinner() {
+    local pid=$1
+    local delay=0.3
+    local spinstr='|/-\'
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf " [%c]  " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b"
+    done
+    printf "    \b\b\b\b"
+}
+
 print_success() {
     echo "${GREEN}"
     echo "                   __ "
