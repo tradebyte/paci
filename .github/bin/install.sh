@@ -108,8 +108,8 @@ main() {
         YELLOW="$(tput setaf 3)"
         BLUE="$(tput setaf 4)"
         BOLD="$(tput bold)"
-        LINE="$(tput smul)"
         NORMAL="$(tput sgr0)"
+        LINE="$(tput smul)"
 
         # Define symbols to use
         OK=$(printf "${GREEN}${BOLD}\xE2\x9C\x94${NORMAL}")
@@ -122,8 +122,8 @@ main() {
         YELLOW=""
         BLUE=""
         BOLD=""
-        LINE=""
         NORMAL=""
+        LINE=""
 
         # Fallback symbols
         OK=$(printf "[ok]")
