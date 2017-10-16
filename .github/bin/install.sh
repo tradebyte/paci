@@ -160,7 +160,7 @@ main() {
         bail() {
             failed=1
             echo -e "  ${ERR} The ${BOLD}paci${NORMAL} command is not in your \$PATH!"
-            echo -e "    Please add ${BLUE}export PATH=\"\$PATH:\$HOME/.local/bin\"${NORMAL} to your ${BLUE}~/.bashrc${NORMAL}!\n"
+            echo -e "    Please add ${BLUE}export PATH=\"\$PATH:\$HOME/.local/bin\"${NORMAL} to your ${BLUE}~/.bashrc${NORMAL} or ${BLUE}~/.zshrc${NORMAL}!\n"
             export PATH="$PATH:$HOME/.local/bin"
             echo -e "    The ${LINE}\$PATH${NORMAL} variable was temporarily set."
         }
