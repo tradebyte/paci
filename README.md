@@ -16,8 +16,16 @@ Please see [Limitations](#limitations)
 ### Via script
 
 ```
-curl -s https://raw.githubusercontent.com/tradebyte/paci/master/.github/bin/install.sh | bash
+bash <(curl -s https://raw.githubusercontent.com/tradebyte/paci/master/.github/bin/install.sh)
 ```
+
+The script takes two parameter `main_registry` and `fallback_registry`. If you want to use them for your setup just append them accordingly.
+
+Example:
+```
+bash <(curl -s https://raw.githubusercontent.com/tradebyte/paci/master/.github/bin/install.sh) https://raw.githubusercontent.com/tradebyte/paci/master
+```
+(which would define the main registry)
 
 ### Manually
 
