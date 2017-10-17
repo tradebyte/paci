@@ -141,7 +141,7 @@ main() {
     if [ "$DISTRO" == "Ubuntu" ] || [ "$DISTRO" == "Debian" ]; then
         # Step 1: Check or install the requirements
         echo "${INFO}${YELLOW} Checking dependencies...${NORMAL}"
-        check_dependencies "python3 python3-venv python3-pip rsync"
+        check_dependencies "python3 python3-venv python3-pip rsync git"
 
         # Step 2: Install via pip
         printf "\n${INFO}${YELLOW} Installing paci via pip...${NORMAL}"
