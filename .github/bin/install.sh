@@ -114,7 +114,7 @@ main() {
         # Define symbols to use
         OK=$(printf "${GREEN}${BOLD}\xE2\x9C\x94${NORMAL}")
         ERR=$(printf "${RED}${BOLD}\xE2\x9C\x97${NORMAL}")
-        INFO=$(printf "${BLUE}${BOLD}\xE2\x97\x8F${NORMAL}")
+        INFO=$(printf "${BLUE}${BOLD}\xE2\x9D\x90${NORMAL}")
         RETURN=$(printf "${BLUE}${BOLD}\xE2\x86\xAA${NORMAL}")
     else
         RED=""
