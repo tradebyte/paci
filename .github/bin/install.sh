@@ -149,7 +149,7 @@ main() {
         check_dependencies "$REQS"
 
         # Step 2: Install via pip
-        printf "\n${INFO}${YELLOW} Installing paci via pip...${NORMAL}"
+        printf "\n%s Installing paci via pip...${NORMAL}" "${INFO}${YELLOW}"
         (pip3 install --upgrade paci >/dev/null 2>&1) &
         spinner $!
         if [ $? -eq 0 ]; then
@@ -182,7 +182,7 @@ main() {
         echo -e "\n${INFO}${YELLOW} Configuring paci...${NORMAL}"
         cmd_configure=(paci)
         cmd_configure+=("configure")
-        if [ ! -f $HOME/.config/paci/settings.yml ]; then
+        if [ ! -f "$HOME/.config/paci/settings.yml" ]; then
             # Ask if they want to use the defaults
             read -p "  ${RETURN} Do you want to use the defaults (Y/n)? " yn
             case $yn in
@@ -212,7 +212,7 @@ main() {
         fi
 
         # Step 5: Refresh paci registries
-        printf "\n${INFO}${YELLOW} Refreshing paci index...${NORMAL}"
+        printf "\n%s Refreshing paci index...${NORMAL}" "${INFO}${YELLOW}"
         (paci refresh >/dev/null 2>&1) &
         spinner $!
         if [ $? -eq 0 ]; then
