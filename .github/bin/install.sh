@@ -43,7 +43,8 @@ determine_os() {
 check_dependencies() {
     # Gether information about installed and missing packages
     for pkg in $1; do
-        if [ $(dpkg-query -W -f='${Status}' $pkg 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+        # shellcheck disable=SC2016
+        if [ "$(dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -c 'ok installed')" -eq 0 ]; then
             missing_pkgs+=($pkg)
         else
             installed_pkgs+=($pkg)
@@ -52,7 +53,8 @@ check_dependencies() {
 
     # Display installed packages
     if [ ${#installed_pkgs[@]} -ge 1 ]; then
-        versions=$(dpkg-query -W -f='[ok] ${Package}: ${Version}\n' ${installed_pkgs[@]})
+        # shellcheck disable=SC2016
+        versions="$(dpkg-query -W -f='[ok] ${Package}: ${Version}\n' "${installed_pkgs[@]}")"
         installed="${versions//\[ok\]/  $OK}"
         echo -e "$installed"
     fi
@@ -63,13 +65,13 @@ check_dependencies() {
         echo -e "\n  ${RETURN}${GREEN} All dependencies are installed. ${BOLD}Everything ok!${NORMAL} "
     else
         # Display missing packages
-        for pkg in ${missing_pkgs[@]}; do
+        for pkg in "${missing_pkgs[@]}"; do
             echo "  ${ERR} $pkg"
         done
 
         # Install missing packages
-        printf "\n${RETURN}${YELLOW} Installing missing packages...${NORMAL}"
-        (sudo apt-get -y install ${missing_pkgs[@]} >/dev/null 2>&1) &
+        printf "\n%s Installing missing packages...${NORMAL}" "${RETURN}${YELLOW}"
+        (sudo apt-get -y install "${missing_pkgs[@]}" >/dev/null 2>&1) &
         spinner $!
         if [ $? -eq 0 ]; then
             echo -e "\n  ${OK} All dependencies are now installed."
