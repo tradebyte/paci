@@ -97,8 +97,8 @@ print_success() {
 
 main() {
     # Save parameters for later use
-    main_registry="$1"
-    fallback_registry="$2"
+    MAIN_URL="$1"
+    FALLBACK_URL="$2"
 
     # Define settings
     REQS="python3 python3-venv python3-pip rsync git"
@@ -194,13 +194,13 @@ main() {
             esac
 
             # Use if set the main registry
-            if [ ! -z "$main_registry" ]; then
-                cmd_configure+=("--main-registry=$main_registry")
+            if [ ! -z "$MAIN_URL" ]; then
+                cmd_configure+=("--main-registry=$MAIN_URL")
             fi
 
             # Use if set the fallback registry
-            if [ ! -z "$fallback_registry" ]; then
-                cmd_configure+=("--fallback-registry=$fallback_registry")
+            if [ ! -z "$FALLBACK_URL" ]; then
+                cmd_configure+=("--fallback-registry=$FALLBACK_URL")
             fi
 
             # Actually run the paci configure command
