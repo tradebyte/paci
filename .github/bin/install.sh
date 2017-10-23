@@ -117,11 +117,10 @@ main() {
         NORMAL="$(tput sgr0)"
         LINE="$(tput smul)"
 
-        # Define symbols to use
-        OK=$(printf "${GREEN}${BOLD}\xE2\x9C\x94${NORMAL}")
-        ERR=$(printf "${RED}${BOLD}\xE2\x9C\x97${NORMAL}")
-        INFO=$(printf "${BLUE}${BOLD}\xE2\x9D\x90${NORMAL}")
-        RETURN=$(printf "${BLUE}${BOLD}\xE2\x86\xAA${NORMAL}")
+        OK=$(printf "%s\xE2\x9C\x94${NORMAL}" "${GREEN}${BOLD}")
+        ERR=$(printf "%s\xE2\x9C\x97${NORMAL}" "${RED}${BOLD}")
+        INFO=$(printf "%s\xE2\x9D\x90${NORMAL}" "${BLUE}${BOLD}")
+        RETURN=$(printf "%s\xE2\x86\xAA${NORMAL}" "${BLUE}${BOLD}")
     else
         RED=""
         GREEN=""
