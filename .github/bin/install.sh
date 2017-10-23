@@ -19,20 +19,6 @@ spinner() {
     printf "    \b\b\b\b"
 }
 
-print_success() {
-    echo "${GREEN}"
-    echo "                   __ "
-    echo ".-----.---.-.----.|__|"
-    echo "|  _  |  _  |  __||  |"
-    echo "|   __|___._|____||__|"
-    echo "|__|                  ....is now ${BOLD}installed!${NORMAL}"
-    echo ""
-    echo ""
-    echo "For more information about this tool, visit our Github repository:"
-    echo "https://github.com/tradebyte/paci"
-    echo ""
-}
-
 determine_os() {
     # Determine OS platform
     export DISTRO
@@ -91,6 +77,20 @@ check_dependencies() {
             echo -e "\n  ${ERR} Failed to install dependencies. Abort."
         fi
     fi
+}
+
+print_success() {
+    echo "${GREEN}"
+    echo "                   __ "
+    echo ".-----.---.-.----.|__|"
+    echo "|  _  |  _  |  __||  |"
+    echo "|   __|___._|____||__|"
+    echo "|__|                  ....is now ${BOLD}installed!${NORMAL}"
+    echo ""
+    echo ""
+    echo "For more information about this tool, visit our Github repository:"
+    echo "https://github.com/tradebyte/paci"
+    echo ""
 }
 
 main() {
