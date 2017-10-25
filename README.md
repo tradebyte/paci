@@ -68,7 +68,7 @@ Usage:
   paci refresh
   paci list
   paci remove
-  paci configure
+  paci configure [--no-choice] [--silent] [--main-registry=<url>] [--fallback-registry=<url>]
   paci generate (repo-index <path> | pkg-index)
   paci --help
   paci --version
