@@ -1,13 +1,15 @@
 """Helper to deal with downloads"""
 
 import os
+import stat
 import subprocess
 
 
 def execute_shell_script(script, working_dir):
     """Execute a shell script."""
-    with open(script, "r") as file:
-        execute(file.read(), working_dir)
+    st = os.stat(script)
+    os.chmod(script, st.st_mode | stat.S_IEXEC)
+    subprocess.call(script, shell=True, cwd=working_dir)
 
 
 def set_script_variables(values):
