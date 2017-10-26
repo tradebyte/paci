@@ -95,6 +95,35 @@ print_success() {
     echo ""
 }
 
+run_configuration() {
+    cmd_configure=$1
+
+    # Ask if they want to use the defaults
+    read -p "  ${RETURN} Do you want to use the defaults (Y/n)? " yn
+    case $yn in
+        [Nn]) echo "" ;;
+        *)
+            cmd_configure+=("--no-choice")
+            cmd_configure+=("--silent")
+            ;;
+    esac
+
+    # Use if set the main registry
+    if [ ! -z "$MAIN_URL" ]; then
+        cmd_configure+=("--main-registry=$MAIN_URL")
+    fi
+
+    # Use if set the fallback registry
+    if [ ! -z "$FALLBACK_URL" ]; then
+        cmd_configure+=("--fallback-registry=$FALLBACK_URL")
+    fi
+
+    # Actually run the paci configure command
+    "${cmd_configure[@]}"
+
+    echo -e "  ${OK} Configuration successful."
+}
+
 main() {
     # Save parameters for later use
     MAIN_URL="$1"
