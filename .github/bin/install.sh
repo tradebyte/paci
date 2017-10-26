@@ -149,6 +149,7 @@ main() {
         OK=$(printf "%s\xE2\x9C\x94${NORMAL}" "${GREEN}${BOLD}")
         ERR=$(printf "%s\xE2\x9C\x97${NORMAL}" "${RED}${BOLD}")
         INFO=$(printf "%s\xE2\x9D\x90${NORMAL}" "${BLUE}${BOLD}")
+        INPUT=$(printf "%s\xE2\x9D\x93${NORMAL}" "${RED}${BOLD}")
         RETURN=$(printf "%s\xE2\x86\xAA${NORMAL}" "${BLUE}${BOLD}")
     else
         RED=""
@@ -163,6 +164,7 @@ main() {
         OK=$(printf "[ok]")
         ERR=$(printf "[error]")
         INFO=$(printf "[info]")
+        INPUT=$(printf "[?]")
         RETURN=""
     fi
 
