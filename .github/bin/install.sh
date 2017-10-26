@@ -190,7 +190,7 @@ main() {
         fi
 
         # Step 3: Verify $PATH
-        echo -e "\n${INFO}${YELLOW} Verifing \$PATH...${NORMAL}"
+        echo -e "\n${INFO}${YELLOW} Verifying \$PATH...${NORMAL}"
 
         # Write a message in case the $PATH doesn't contain the command
         bail() {
