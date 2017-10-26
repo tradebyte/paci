@@ -214,32 +214,19 @@ main() {
         cmd_configure=(paci)
         cmd_configure+=("configure")
         if [ ! -f "$HOME/.config/paci/settings.yml" ]; then
-            # Ask if they want to use the defaults
-            read -p "  ${RETURN} Do you want to use the defaults (Y/n)? " yn
+            run_configuration "${cmd_configure[@]}"
+        else
+
+            echo -e "  ${RETURN}${GREEN} Configuration already present.${NORMAL}\n"
+
+            # Ask if they want to overwrite it
+            read -p "  ${INPUT}${YELLOW} Do you want to overwrite the config (y/N)? " yn
             case $yn in
-                [Nn]) echo "" ;;
+                [Yy]) run_configuration "${cmd_configure[@]}" ;;
                 *)
-                    cmd_configure+=("--no-choice")
-                    cmd_configure+=("--silent")
+                    echo ""
                     ;;
             esac
-
-            # Use if set the main registry
-            if [ ! -z "$MAIN_URL" ]; then
-                cmd_configure+=("--main-registry=$MAIN_URL")
-            fi
-
-            # Use if set the fallback registry
-            if [ ! -z "$FALLBACK_URL" ]; then
-                cmd_configure+=("--fallback-registry=$FALLBACK_URL")
-            fi
-
-            # Actually run the paci configure command
-            "${cmd_configure[@]}"
-
-            echo -e "  ${OK} Configuration successful."
-        else
-            echo -e "  ${RETURN}${GREEN} Configuration already present. ${BOLD}Everything ok!${NORMAL}"
         fi
 
         # Step 5: Refresh paci registries
