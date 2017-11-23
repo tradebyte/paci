@@ -130,7 +130,8 @@ main() {
     FALLBACK_URL="$2"
 
     # Define settings
-    REQS="python3 python3-venv python3-pip rsync git"
+    REQs="python3 python3-venv python3-pip rsync git"
+    PY_REQs=("paci" "halo" "xonsh")
 
     # Use colors, but only if connected to a terminal, and that terminal
     # supports them.
@@ -177,11 +178,11 @@ main() {
     if [ "$DISTRO" == "Ubuntu" ] || [ "$DISTRO" == "Debian" ]; then
         # Step 1: Check or install the requirements
         echo "${INFO}${YELLOW} Checking dependencies...${NORMAL}"
-        check_dependencies "$REQS"
+        check_dependencies "$REQs"
 
         # Step 2: Install via pip
         printf "\n%s Installing paci via pip...${NORMAL}" "${INFO}${YELLOW}"
-        (pip3 install --upgrade paci >/dev/null 2>&1) &
+        (pip3 install --user --upgrade "${PY_REQs[@]}" >/dev/null 2>&1) &
         spinner $!
         if [ $? -eq 0 ]; then
             echo -e "\n  ${OK} Installation successful."
