@@ -6,4 +6,5 @@ env
 .cache
 *.pyc
 *.egg-info
+.vscode/*
 __pycache__/
