@@ -131,7 +131,7 @@ main() {
 
     # Define settings
     REQs="python3 python3-venv python3-pip rsync git"
-    PY_REQs=("paci" "halo" "xonsh")
+    PY_REQs=("paci" "halo" "xonsh" "termcolor")
 
     # Use colors, but only if connected to a terminal, and that terminal
     # supports them.
