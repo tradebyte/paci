@@ -130,7 +130,7 @@ main() {
     FALLBACK_URL="$2"
 
     # Define settings
-    REQs="python3 python3-venv python3-pip rsync git"
+    REQs="python3 python3-venv python3-pip rsync git jq"
     PY_REQs=("paci" "halo" "xonsh" "termcolor" "easydict" "log_symbols" "requests")
 
     # Use colors, but only if connected to a terminal, and that terminal
