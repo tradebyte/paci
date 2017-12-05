@@ -9,7 +9,7 @@ Usage:
   paci refresh
   paci list
   paci remove
-  paci configure [--no-choice] [--silent] [--main-registry=<url>] [--fallback-registry=<url>]
+  paci configure [--no-choice] [--silent] [--main-registry=<url>] [--fallback-registry=<url>] [--main-repo=<url>] [--fallback-repo=<url>]
   paci generate (repo-index <path> | pkg-index)
   paci --help
   paci --version
@@ -17,7 +17,7 @@ Usage:
 Options:
   -h, --help                         Show this screen.
   -v, --version                      Show version.
-  -n, --no-config                    Omits the config.
+  -n, --no-config                     Omits the config.
   -c, --no-cleanup                   Don't cleanup the mess.
   -o, --overwrite                    Overwrite the config.
   -r, --reuse                        Reuse the downloaded files.

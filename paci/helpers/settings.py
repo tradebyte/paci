@@ -18,6 +18,10 @@ class Settings(object):
                 "registry": {
                     "main": "https://raw.githubusercontent.com/tradebyte/paci_packages/master",
                     "fallback": "https://raw.githubusercontent.com/tradebyte/paci_packages/master"
+                },
+                "repo": {
+                    "main": "https://github.com/tradebyte/paci_packages.git",
+                    "fallback": "https://github.com/tradebyte/paci_packages.git"
                 }
             }
         }
@@ -41,6 +45,7 @@ class Settings(object):
         # Merging defaults and settings from file to one dict
         self.settings["paci"] = {**self.defaults["paci"], **settings_file["paci"]}
         self.settings["paci"]["registry"] = {**self.defaults["paci"]["registry"], **settings_file["paci"]["registry"]}
+        self.settings["paci"]["repo"] = {**self.defaults["paci"]["repo"], **settings_file["paci"]["repo"]}
 
         # Ensure the base directory exists
         os.makedirs(os.path.dirname(self.settings["paci"]["base"]), exist_ok=True)

@@ -6,10 +6,17 @@ import requests
 from clint.textui import progress
 from jsontraverse.parser import JsonTraverseParser
 from jinja2 import Template
+from paci.helpers import cmd_helper
 
+
+def git_download(url, path, folder, working_dir):
+    cmd_helper.execute("git clone -n {} --depth 1 {} >/dev/null 2>&1".format(url, path), working_dir)
+    cmd_helper.execute("git checkout HEAD {}".format(folder), path)
 
 def download(url, path, sha512sum=None, hidden=None, filename=None):
     """Download a file, show the progress and do integrity checks."""
+    # Should be replaced some times.
+
     file = filename if filename else url.split("/")[-1]
     file_path = os.path.join(path, file)
 

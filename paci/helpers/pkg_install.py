@@ -1,7 +1,7 @@
 """Helper to deal with the installation of a package"""
 
 import tempfile
-import os
+import os.path
 import shutil
 from paci.helpers import download_helper, file_helper, cmd_helper, cache_helper
 
@@ -19,7 +19,9 @@ class PkgInstall(object):
 
     def install(self, pkg_name, base_pkg_dir):
         """Main function to walk through the installation."""
-        repo_url = cache_helper.get_pkg_url(pkg_name, self.settings["paci"]["registry"], self.repo_cache)
+
+        # This is why we still need the raw url
+        registry_url = cache_helper.get_pkg_url(pkg_name, self.settings["paci"]["registry"], self.repo_cache)
 
         pkg_files = {
             "GET.json": "",
@@ -31,8 +33,11 @@ class PkgInstall(object):
         if self.update:
             pkg_files.update({"UPDATE.sh": ""})
 
-        if repo_url:
-            pkg_url = os.path.join(repo_url, pkg_name)
+        if registry_url:
+            pkg_url = os.path.join(registry_url, pkg_name)
+
+            repo_type = list(self.settings["paci"]["registry"].keys())[list(self.settings["paci"]["registry"].values()).index(registry_url)]
+            repo_url = self.settings["paci"]["repo"][repo_type]
 
             ##########################################
             # Step 1: Setup temp folder and RECIPE.yml
@@ -46,17 +51,18 @@ class PkgInstall(object):
                 matching_dirs = filter(lambda k: pkg_name in k, sub_dirs)
                 latest_dir = max([os.path.join(temp_dir, name) for name in matching_dirs], key=os.path.getmtime)
 
-                pkg_temp_dir = latest_dir
+                pkg_temp_dir = os.path.join(latest_dir, pkg_name)
                 pkg_recipe = os.path.join(pkg_temp_dir, "RECIPE.yml")
 
             else:
                 # Create temporary package directory
                 pkg_temp_dir = tempfile.mkdtemp(dir=self.settings["paci"]["temp"], prefix=pkg_name + "_")
 
-                # Download RECIPE.yml
-                # pylint: disable=redefined-variable-type
-                # no error
-                pkg_recipe = download_helper.download(os.path.join(pkg_url, "RECIPE.yml"), pkg_temp_dir, hidden=True)
+                # Clone the right part of the repo
+                download_helper.git_download(repo_url, pkg_temp_dir, pkg_name, self.settings["paci"]["temp"])
+
+                pkg_temp_dir = os.path.join(pkg_temp_dir, pkg_name)
+                pkg_recipe = os.path.join(pkg_temp_dir, "RECIPE.yml")
 
             ################################
             # Step 2: Setup vars and folders
@@ -82,9 +88,26 @@ class PkgInstall(object):
             print("Package working directory: {}\n".format(pkg_temp_dir))
 
             ###################################
-            # Step 3: Download all needed files
+            # Step 3: Download additional files
             ###################################
-            self.__download(pkg_conf, pkg_files, pkg_temp_dir, pkg_url, pkg_vars)
+            # self.__download(pkg_conf, pkg_files, pkg_temp_dir, pkg_url, pkg_vars)
+            # get all files which are present
+            for (file, _) in pkg_files.items():
+                pkg_files[file] = os.path.join(pkg_temp_dir, file)
+
+            if "sources" in pkg_conf:
+                pkg_files["SOURCES.tar.gz"] = os.path.join(pkg_temp_dir, "SOURCES.tar.gz")
+
+            # Extract SOURCES file
+            if "SOURCES.tar.gz" in pkg_files:
+                print(pkg_files["SOURCES.tar.gz"])
+                print(os.path.join(pkg_vars["pkg_src"], "SOURCES"))
+                file_helper.extract_tar_gz(os.path.join(pkg_vars["pkg_src"], "SOURCES"),
+                                           pkg_files["SOURCES.tar.gz"])
+
+            # Download additional stuff
+            if pkg_files["GET.json"]:
+                download_helper.download_get_files(pkg_files["GET.json"], pkg_vars["pkg_src"], pkg_vars)
 
             ############################
             # Step 4: Start Installation
@@ -99,34 +122,6 @@ class PkgInstall(object):
             print("Error! Package not found!")
             exit(1)
 
-    def __download(self, pkg_conf, pkg_files, pkg_temp_dir, pkg_url, pkg_vars):
-        """Download all needed files."""
-
-        if self.options["--reuse"]:
-            print("Reusing files...")
-            # Provide path to all files needed
-            for (file, _) in pkg_files.items():
-                pkg_files[file] = os.path.join(pkg_temp_dir, file)
-        else:
-            print("Downloading files...")
-
-            # Download all meta files
-            for (file, _) in pkg_files.items():
-                pkg_files[file] = download_helper.download(os.path.join(pkg_url, file), pkg_temp_dir)
-
-            if "sources" in pkg_conf:
-                pkg_files["SOURCES.tar.gz"] = download_helper.download(
-                    os.path.join(pkg_url, pkg_conf["sources"]),
-                    pkg_vars["pkg_src"],
-                    pkg_conf["sha512sum"]
-                )
-
-            if "SOURCES.tar.gz" in pkg_files:
-                file_helper.extract_tar_gz(os.path.join(pkg_vars["pkg_src"], "SOURCES"),
-                                           pkg_files["SOURCES.tar.gz"])
-
-            if pkg_files["GET.json"]:
-                download_helper.download_get_files(pkg_files["GET.json"], pkg_vars["pkg_src"], pkg_vars)
 
     def __run_install(self, pkg_files, pkg_vars):
         """Execute the install/update script and move all files to the right place."""

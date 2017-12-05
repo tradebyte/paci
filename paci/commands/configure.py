@@ -21,10 +21,14 @@ class Configure(Base):
         std_base = settings_helper.defaults["paci"]["base"]
         std_main = settings_helper.defaults["paci"]["registry"]["main"]
         std_fallback = settings_helper.defaults["paci"]["registry"]["fallback"]
+        std_repo_main = settings_helper.defaults["paci"]["repo"]["main"]
+        std_repo_fallback = settings_helper.defaults["paci"]["repo"]["fallback"]
 
         # Handle parameters
         def_main = std_main if not self.options["--main-registry"] else self.options["--main-registry"]
         def_fallback = std_fallback if not self.options["--fallback-registry"] else self.options["--fallback-registry"]
+        def_repo_main = std_repo_main if not self.options["--main-repo"] else self.options["--main-repo"]
+        def_repo_fallback = std_repo_fallback if not self.options["--fallback-repo"] else self.options["--fallback-repo"]
 
         if self.options["--no-choice"]:
             # Don't ask - use defaults
@@ -35,12 +39,16 @@ class Configure(Base):
             base_dir = std_base
             main_registry = def_main
             fallback_registry = def_fallback
+            main_repo = def_repo_main
+            fallback_repo = def_repo_fallback
         else:
             # Get user input for all values
             temp_dir = display_helper.std_input("Enter directory to store temporary files ({}):\n", std_temp)
             base_dir = display_helper.std_input("Enter file in which to save the package meta data ({}):\n", std_base)
             main_registry = display_helper.std_input("Enter main registry url ({}):\n", def_main)
             fallback_registry = display_helper.std_input("Enter fallback registry url ({}):\n", def_fallback)
+            main_repo = display_helper.std_input("Enter main repo url ({}):\n", def_repo_main)
+            fallback_repo = display_helper.std_input("Enter fallback repo url ({}):\n", def_repo_fallback)
 
         # Create settings dict
         settings = {
@@ -50,6 +58,10 @@ class Configure(Base):
                 "registry": {
                     "main": main_registry,
                     "fallback": fallback_registry
+                },
+                "repo": {
+                    "main": main_repo,
+                    "fallback": fallback_repo
                 }
             }
         }
