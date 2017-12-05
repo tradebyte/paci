@@ -23,7 +23,7 @@ The script takes two parameter `main_registry` and `fallback_registry`. If you w
 
 Example:
 ```
-bash <(curl -s https://raw.githubusercontent.com/tradebyte/paci/master/.github/bin/install.sh) https://raw.githubusercontent.com/tradebyte/paci/master
+bash <(curl -s https://raw.githubusercontent.com/tradebyte/paci/master/.github/bin/install.sh) https://raw.githubusercontent.com/tradebyte/paci/master https://github.com/tradebyte/paci_packages.git
 ```
 (which would define the main registry)
 
