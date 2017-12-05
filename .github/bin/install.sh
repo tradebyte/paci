@@ -113,9 +113,19 @@ run_configuration() {
         cmd_configure+=("--main-registry=$MAIN_URL")
     fi
 
+    # Use if set the main registry
+    if [ ! -z "$MAIN_REPO" ]; then
+        cmd_configure+=("--main-registry=$MAIN_REPO")
+    fi
+
     # Use if set the fallback registry
     if [ ! -z "$FALLBACK_URL" ]; then
         cmd_configure+=("--fallback-registry=$FALLBACK_URL")
+    fi
+
+    # Use if set the fallback repo
+    if [ ! -z "$FALLBACK_REPO" ]; then
+        cmd_configure+=("--fallback-repo=$FALLBACK_REPO")
     fi
 
     # Actually run the paci configure command
@@ -127,7 +137,9 @@ run_configuration() {
 main() {
     # Save parameters for later use
     MAIN_URL="$1"
-    FALLBACK_URL="$2"
+    MAIN_REPO="$2"
+    FALLBACK_URL="$3"
+    FALLBACK_REPO="$4"
 
     # Define settings
     REQs="python3 python3-venv python3-pip rsync git jq"
