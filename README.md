@@ -1,6 +1,8 @@
 ![paci](https://raw.github.com/tradebyte/paci/master/.github/images/paci-logo.png "Your agents are standing by.Your friendly, lightweight and flexible package manager.")
 
 -----
+[![PyPI version](https://badge.fury.io/py/paci.svg)](https://badge.fury.io/py/paci) [![GitHub issues](https://img.shields.io/github/issues/tradebyte/paci.svg)](https://github.com/tradebyte/paci/issues) [![GitHub license](https://img.shields.io/github/license/tradebyte/paci.svg)](https://github.com/tradebyte/paci/blob/master/LICENSE)
+
 
 # paci
 
