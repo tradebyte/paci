@@ -3,18 +3,20 @@ import sys
 from halo import Halo
 from termcolor import colored
 from log_symbols import LogSymbols
-from bash import bash
+from paci.helpers.shell import Shell
 
 DELAY = 0.1  # time to wait for I/O to finish
 
 
-def sh(cmd):
+def sh(cmd, cwd=None):
     """Runs a command and returns it's output
 
     Parameters
     ----------
     cmd : str
         The shell command which will be executed.
+    cwd : str, optional
+        The path to the working directory.
 
     Returns
     -------
@@ -22,7 +24,7 @@ def sh(cmd):
     True if the execution was successful but no output was given.
     The output of the command if it was successful and stdout wasn't empty.
     """
-    executed_cmd = bash(cmd)
+    executed_cmd = Shell(cmd, cwd=cwd)
     if executed_cmd.code == 0:
         if executed_cmd.stdout:
             return str(executed_cmd)
