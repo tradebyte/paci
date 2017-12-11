@@ -8,7 +8,7 @@ from paci import __version__
 
 this_dir = abspath(dirname(__file__))
 
-with open("README.md") as f:
+with open("README.rst") as f:
     readme = f.read()
 
 with open("LICENSE") as f:
