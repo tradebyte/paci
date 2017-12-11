@@ -18,7 +18,7 @@ setup(
     name="paci",
     version=__version__,
     description="Your friendly, lightweight and flexible package manager.",
-    long_description=readme,
+    long_description=open('DESCRIPTION.rst').read(),
     url="https://github.com/tradebyte/paci",
     download_url="https://github.com/tradebyte/paci/archive/{}.tar.gz".format(__version__),
     author="Niklas Heer",

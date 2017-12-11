@@ -1,7 +1,8 @@
 exclude .gitignore
 exclude .coverage
 exclude .travis.yml
-include README.rst
+include DESCRIPTION.rst
+include README.md
 include setup.cfg
 prune .cache
 prune .git
@@ -10,5 +11,4 @@ prune dist
 recursive-exclude *.egg-info *
 recursive-include tests *
 recursive-exclude .github *
-include README.rst
 include LICENSE

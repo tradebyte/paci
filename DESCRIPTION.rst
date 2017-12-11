@@ -1,15 +1,3 @@
-.. |br| raw:: html
-
-    <br />
-
-.. figure:: https://raw.github.com/tradebyte/paci/master/.github/images/paci-logo.png
-   :alt: Your agents are standing by.Your friendly, lightweight and flexible package manager.
-
-
---------------
-
-|PyPI version| |GitHub issues| |GitHub license|
-
 paci
 ====
 
@@ -18,7 +6,6 @@ Your friendly, lightweight and flexible package manager.
 It is a package manager which can be used to distribute your own
 packages. It is meant to install all packages in your userland.
 
-Please see `Limitations <#limitations>`__
 
 Installation
 ------------
@@ -51,8 +38,7 @@ On Ubuntu 16.04:
 
     pip3 install paci
 
-After that you should add ``$HOME/.local/bin`` to your ``$PATH`` in your
-``~/.bashrc`` file.
+After that you should add ``$HOME/.local/bin`` to your ``$PATH`` in your ``~/.bashrc`` file.
 
 .. code:: bash
 
@@ -65,12 +51,6 @@ Requirements
 -  python3-venv
 -  rsync
 
-Setup
------
-
-::
-
-    ❯ make
 
 Usage
 -----
@@ -126,31 +106,17 @@ Some snippets
 -  Deactivate virtualenv: ``deactivate``
 -  Run the linter: ``pylint paci``
 -  New release of this CLI tool (pip):
-   ``$ python setup.py sdist bdist_wheel``
+   ``$ python3 setup.py sdist bdist_wheel``
 
-Contributing
-------------
-
-See the `CONTRIBUTING <.github/CONTRIBUTING.md>`__ document. |br|
-Thank you, `contributors <https://github.com/tradebyte/paci/graphs/contributors>`__!
 
 License
 -------
 
-Copyright (c) 2017 by the Tradebyte Software GmbH. |br|
+Copyright (c) 2017 by the Tradebyte Software GmbH.
 ``paci`` is free software, and may be redistributed under the terms specified in the `LICENSE </LICENSE>`__ file.
 
 About
 -----
 
-``paci`` is maintained and funded by the Tradebyte Software GmbH. |br|
+``paci`` is maintained and funded by the Tradebyte Software GmbH.
 The names and logos for ``paci`` are trademarks of the Tradebyte Software GmbH.
-
-We love free software!
-
-.. |PyPI version| image:: https://badge.fury.io/py/paci.svg
-   :target: https://badge.fury.io/py/paci
-.. |GitHub issues| image:: https://img.shields.io/github/issues/tradebyte/paci.svg
-   :target: https://github.com/tradebyte/paci/issues
-.. |GitHub license| image:: https://img.shields.io/github/license/tradebyte/paci.svg
-   :target: https://github.com/tradebyte/paci/blob/master/LICENSE
