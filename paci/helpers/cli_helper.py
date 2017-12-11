@@ -164,7 +164,7 @@ def run_cmd(msg, cmd, ok_msg="", err_msg="", exit_msg="", exit_all=False, cwd=No
     ----------
     msg : str
         You should describe what the command is doing in simple words.
-    cmd : list
+    cmd : str, list
         The command you want to execute. Each parameter can be added to the list.
     ok_msg : str, optional
         The text you want to display if the command is executed successfully.
@@ -184,7 +184,7 @@ def run_cmd(msg, cmd, ok_msg="", err_msg="", exit_msg="", exit_all=False, cwd=No
     spinner = Halo(text=msg, spinner='dots', color='blue')
     spinner.start()
     time.sleep(DELAY)  # If this is cut out some IO operations will fail  if !(@(cmd) &>/dev/null):
-    if sh(" ".join(cmd), cwd=cwd):
+    if sh(cmd if type(cmd) is str else " ".join(cmd), cwd=cwd):
         spinner.succeed(colored(ok_msg if ok_msg else msg, 'green'))
         return True
     else:
