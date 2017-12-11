@@ -8,12 +8,6 @@ from paci import __version__
 
 this_dir = abspath(dirname(__file__))
 
-with open("README.rst") as f:
-    readme = f.read()
-
-with open("LICENSE") as f:
-    license_file = f.read()
-
 setup(
     name="paci",
     version=__version__,
@@ -23,7 +17,7 @@ setup(
     download_url="https://github.com/tradebyte/paci/archive/{}.tar.gz".format(__version__),
     author="Niklas Heer",
     author_email="niklas.heer@tradebyte.com",
-    license=license_file,
+    license=open('LICENSE').read(),
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
@@ -36,7 +30,7 @@ setup(
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5"
     ],
-    keywords=["cli", "package-manager", "install", "linux", "ubuntu"],
+    keywords=["cli", "package-manager", "install", "linux", "ubuntu", "bash"],
     packages=find_packages(exclude=["docs", "tests*"]),
     install_requires=[
         "docopt",
