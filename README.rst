@@ -150,3 +150,5 @@ We love free software!
    :target: https://github.com/tradebyte/paci/issues
 .. |GitHub license| image:: https://img.shields.io/github/license/tradebyte/paci.svg
    :target: https://github.com/tradebyte/paci/blob/master/LICENSE
+.. |br| raw:: html
+    <br />
