@@ -184,7 +184,7 @@ def run_cmd(msg, cmd, ok_msg="", err_msg="", exit_msg="", exit_all=False, cwd=No
     spinner = Halo(text=msg, spinner='dots', color='blue')
     spinner.start()
     time.sleep(DELAY)  # If this is cut out some IO operations will fail  if !(@(cmd) &>/dev/null):
-    if sh(" ".join(cmd) + " &>/dev/null", cwd=cwd):
+    if sh(" ".join(cmd), cwd=cwd):
         spinner.succeed(colored(ok_msg if ok_msg else msg, 'green'))
         return True
     else:
