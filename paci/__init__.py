@@ -1,2 +1,2 @@
 """Sets the version number of paci."""
-__version__ = "1.5.0"
+__version__ = "1.5.1"
