@@ -127,22 +127,20 @@ Some snippets
 Contributing
 ------------
 
-See the `CONTRIBUTING <.github/CONTRIBUTING.md>`__ document. Thank you,
-`contributors <https://github.com/tradebyte/paci/graphs/contributors>`__!
+See the `CONTRIBUTING <.github/CONTRIBUTING.md>`__ document. |br|
+Thank you, `contributors <https://github.com/tradebyte/paci/graphs/contributors>`__!
 
 License
 -------
 
-Copyright (c) 2017 by the Tradebyte Software GmbH. ``paci`` is free
-software, and may be redistributed under the terms specified in the
-`LICENSE </LICENSE>`__ file.
+Copyright (c) 2017 by the Tradebyte Software GmbH. |br|
+``paci`` is free software, and may be redistributed under the terms specified in the `LICENSE </LICENSE>`__ file.
 
 About
 -----
 
-``paci`` is maintained and funded by the Tradebyte Software GmbH. The
-names and logos for ``paci`` are trademarks of the Tradebyte Software
-GmbH.
+``paci`` is maintained and funded by the Tradebyte Software GmbH. |br|
+The names and logos for ``paci`` are trademarks of the Tradebyte Software GmbH.
 
 We love free software!
 
