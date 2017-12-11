@@ -1,7 +1,6 @@
 .. figure:: https://raw.github.com/tradebyte/paci/master/.github/images/paci-logo.png
    :alt: Your agents are standing by.Your friendly, lightweight and flexible package manager.
 
-   paci
 
 --------------
 
@@ -15,7 +14,7 @@ Your friendly, lightweight and flexible package manager.
 It is a package manager which can be used to distribute your own
 packages. It is meant to install all packages in your userland.
 
-Please see `Limitations`_
+Please see `Limitations <#limitations>`__
 
 Installation
 ------------
@@ -128,10 +127,24 @@ Some snippets
 Contributing
 ------------
 
-See the `CONTRIBUTING`_
+See the `CONTRIBUTING <.github/CONTRIBUTING.md>`__ document. Thank you,
+`contributors <https://github.com/tradebyte/paci/graphs/contributors>`__!
 
-.. _Limitations: #limitations
-.. _CONTRIBUTING: #contributing
+License
+-------
+
+Copyright (c) 2017 by the Tradebyte Software GmbH. ``paci`` is free
+software, and may be redistributed under the terms specified in the
+`LICENSE </LICENSE>`__ file.
+
+About
+-----
+
+``paci`` is maintained and funded by the Tradebyte Software GmbH. The
+names and logos for ``paci`` are trademarks of the Tradebyte Software
+GmbH.
+
+We love free software!
 
 .. |PyPI version| image:: https://badge.fury.io/py/paci.svg
    :target: https://badge.fury.io/py/paci
