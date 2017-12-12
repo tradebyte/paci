@@ -131,7 +131,7 @@ main() {
 
     # Define settings
     REQs="python3 python3-venv python3-pip rsync git jq"
-    PY_REQs=("paci" "tldr")
+    PY_REQs=("paci" "halo" "termcolor" "easydict" "log_symbols" "tldr")
 
     # Use colors, but only if connected to a terminal, and that terminal
     # supports them.
