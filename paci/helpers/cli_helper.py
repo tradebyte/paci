@@ -92,7 +92,7 @@ def symbol(name):
     return switcher.get(name, "")
 
 
-def print_heading(icon, text):
+def print_heading(icon, text, color="yellow"):
     """Helper function to print a heading.
 
     Parameters
@@ -101,8 +101,10 @@ def print_heading(icon, text):
         Describe a name of a symbol from the symbol() function.
     text : str
         The text of the heading.
+    color : str, optional
+        The color of the heading.
     """
-    print("\n{} {}".format(symbol(icon), colored(text, 'yellow')))
+    print("\n{} {}".format(symbol(icon), colored(text, color)))
 
 
 def ask_with_default(question, default):
