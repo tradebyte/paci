@@ -182,13 +182,15 @@ def run_cmd(msg, cmd, ok_msg="", err_msg="", exit_msg="", exit_all=False, cwd=No
     Returns
     -------
     True if the command was successful else it returns False.
+    If there is an output and it was successful it returns the output of the command.
     """
     spinner = Halo(text=msg, spinner='dots', color='blue')
     spinner.start()
-    time.sleep(DELAY)  # If this is cut out some IO operations will fail  if !(@(cmd) &>/dev/null):
-    if sh(cmd if type(cmd) is str else " ".join(cmd), cwd=cwd):
+    time.sleep(DELAY)  # If this is cut out some IO operations will fail
+    stdout = sh(cmd if type(cmd) is str else " ".join(cmd), cwd=cwd)
+    if stdout:
         spinner.succeed(colored(ok_msg if ok_msg else msg, 'green'))
-        return True
+        return stdout
     else:
         spinner.fail(colored(err_msg if err_msg else msg + " Failed!", 'red'))
         if exit_all:
