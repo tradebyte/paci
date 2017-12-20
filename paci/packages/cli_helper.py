@@ -1,11 +1,33 @@
-import time
 import sys
+import time
+import subprocess
+import os
 from halo import Halo
-from termcolor import colored
 from log_symbols import LogSymbols
-from paci.helpers.shell import Shell
+from termcolor import colored
+
+from paci.packages.shell import Shell
 
 DELAY = 0.1  # time to wait for I/O to finish
+DEBUG = False or bool(os.environ.get("debug"))
+
+def test():
+    print(DEBUG)
+
+
+def debug_execute(cmd, cwd=None):
+    print("Executing command: " + cmd)
+    popen = subprocess.Popen(cmd,
+                             stdout=subprocess.PIPE,
+                             universal_newlines=True,
+                             shell=True,
+                             cwd=cwd)
+    for stdout_line in iter(popen.stdout.readline, ""):
+        yield stdout_line
+    popen.stdout.close()
+    return_code = popen.wait()
+    if return_code:
+        raise subprocess.CalledProcessError(return_code, cmd)
 
 
 def sh(cmd, cwd=None):
@@ -24,14 +46,24 @@ def sh(cmd, cwd=None):
     True if the execution was successful but no output was given.
     The output of the command if it was successful and stdout wasn't empty.
     """
-    executed_cmd = Shell(cmd, cwd=cwd)
-    if executed_cmd.code == 0:
-        if executed_cmd.stdout:
-            return str(executed_cmd)
+    if DEBUG:
+        stdout = ""
+        for path in debug_execute(cmd, cwd=cwd):
+            print(path, end="")
+            stdout += path
+        if stdout:
+            return stdout.rstrip()
         else:
-            return True
+            return False
     else:
-        return False
+        executed_cmd = Shell(cmd, cwd=cwd)
+        if executed_cmd.code == 0:
+            if executed_cmd.stdout:
+                return str(executed_cmd)
+            else:
+                return True
+        else:
+            return False
 
 
 def without_keys(dictionary, keys):
@@ -184,18 +216,22 @@ def run_cmd(msg, cmd, ok_msg="", err_msg="", exit_msg="", exit_all=False, cwd=No
     True if the command was successful else it returns False.
     If there is an output and it was successful it returns the output of the command.
     """
-    spinner = Halo(text=msg, spinner='dots', color='blue')
-    spinner.start()
-    time.sleep(DELAY)  # If this is cut out some IO operations will fail
-    stdout = sh(cmd if type(cmd) is str else " ".join(cmd), cwd=cwd)
-    if stdout:
-        spinner.succeed(colored(ok_msg if ok_msg else msg, 'green'))
-        return stdout
+    if DEBUG:
+        print(colored(msg, "yellow"))
+        return sh(cmd if type(cmd) is str else " ".join(cmd), cwd=cwd)
     else:
-        spinner.fail(colored(err_msg if err_msg else msg + " Failed!", 'red'))
-        if exit_all:
-            abort_script("Aborting script! " + exit_msg)
-    return False
+        spinner = Halo(text=msg, spinner='dots', color='blue')
+        spinner.start()
+        time.sleep(DELAY)  # If this is cut out some IO operations will fail
+        stdout = sh(cmd if type(cmd) is str else " ".join(cmd), cwd=cwd)
+        if stdout:
+            spinner.succeed(colored(ok_msg if ok_msg else msg, 'green'))
+            return stdout
+        else:
+            spinner.fail(colored(err_msg if err_msg else msg + " Failed!", "red"))
+            if exit_all:
+                abort_script("Aborting script! " + exit_msg)
+        return False
 
 
 def check_version(msg, name, desired_version, current_version):
@@ -220,5 +256,5 @@ def check_version(msg, name, desired_version, current_version):
         spinner.succeed(colored("Version of {} is sufficient!".format(name), "green"))
     else:
         ver = ".".join([str(num) for num in desired_version])
-        spinner.fail(colored("{} requires version {}!".format(name, ver), 'red'))
+        spinner.fail(colored("{} requires version {}!".format(name, ver), "red"))
         abort_script("Aborting script! Please update {}!". format(name))

@@ -75,7 +75,8 @@ class PkgInstall(object):
                 "pkg_dir": pkg_dir,
                 "pkg_ver": pkg_conf["version"],
                 "pkg_desc": pkg_conf["summary"],
-                "pkg_name": pkg_conf["name"]
+                "pkg_name": pkg_conf["name"],
+                "debug": "True" if self.options["--debug"] else ""
             }
 
             print("Package: {} (v{})".format(pkg_vars["pkg_name"], pkg_vars["pkg_ver"]))
