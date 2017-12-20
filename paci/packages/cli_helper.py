@@ -11,9 +11,6 @@ from paci.packages.shell import Shell
 DELAY = 0.1  # time to wait for I/O to finish
 DEBUG = False or bool(os.environ.get("debug"))
 
-def test():
-    print(DEBUG)
-
 
 def debug_execute(cmd, cwd=None):
     print("Executing command: " + cmd)
