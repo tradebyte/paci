@@ -63,11 +63,11 @@ These are the planned commands.
     paci
 
     Usage:
-      paci install [--no-config] [--no-cleanup] [--reuse] [--overwrite] <package>...
-      paci update [--no-config] [--no-cleanup] [--reuse] [--overwrite] <package>...
+      paci install [--no-config] [--no-cleanup] [--reuse] [--overwrite] [--debug] <package>...
+      paci update [--no-config] [--no-cleanup] [--reuse] [--overwrite] [--debug] <package>...
       paci search <package>
       paci refresh
-      paci list
+      paci list [--installed]
       paci remove
       paci configure [--no-choice] [--silent] [--main-registry=<url>] [--fallback-registry=<url>]
       paci generate (repo-index <path> | pkg-index)
@@ -80,8 +80,14 @@ These are the planned commands.
       -n, --no-config                    Omits the config.
       -c, --no-cleanup                   Don't cleanup the mess.
       -o, --overwrite                    Overwrite the config.
+      -d, --debug                        Print debugging messages.
+      -i, --installed                    List all installed packages.
       -r, --reuse                        Reuse the downloaded files.
                                          (only possible with --no-cleanup)
+      --no-choice                        Omit the questions and use the defaults.
+      --silent                           Don't print anything.
+      --main-registry=<url>              Set the <url> as default for the main registry.
+      --fallback-registry=<url>          Set the <url> as default for the fallback registry.
 
     Examples:
       paci install phpstorm
@@ -89,6 +95,7 @@ These are the planned commands.
     Help:
       For help using this tool, please open an issue on the Github repository:
       https://github.com/tradebyte/paci
+
 
 Limitations
 -----------
