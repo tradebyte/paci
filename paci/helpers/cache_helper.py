@@ -27,6 +27,27 @@ def find_pkg(name, repo_list, cache_path):
         return None
 
 
+def get_pkgs(repo_list, cache_path):
+    """Get all cached packages."""
+    pkgs = []
+    for repo in sorted(repo_list)[::-1]:
+        file = os.path.join(cache_path, "{}.json".format(repo))
+        if os.path.exists(file):
+            cache_db = TinyDB(file)
+            res = cache_db.all()
+            if res:
+                for entry in res:
+                    if entry not in pkgs:
+                        pkgs.append([entry["name"], entry["ver"], entry["desc"], repo])
+        else:
+            print("Error! No cache found! Please use `paci refresh` first!")
+            exit(1)
+    if pkgs:
+        return pkgs
+    else:
+        return None
+
+
 def get_pkg_url(name, repo_list, cache_path):
     """Get the repo url of a package"""
     res = find_pkg(name, repo_list, cache_path)
