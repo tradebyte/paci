@@ -11,7 +11,7 @@ def print_list(header, entries):
 
 def print_table(entries):
     """Prints out a table"""
-    print(tabulate(cleanup_entries(entries), tablefmt="plain"))
+    print(tabulate(fix_descriptions(entries), tablefmt="plain"))
 
 
 def std_input(text, default):
