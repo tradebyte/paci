@@ -7,7 +7,7 @@ Usage:
   paci update [--no-config] [--no-cleanup] [--reuse] [--overwrite] [--debug] <package>...
   paci search <package>
   paci refresh
-  paci list [--available] [--installed]
+  paci list [--installed]
   paci remove
   paci configure [--no-choice] [--silent] [--main-registry=<url>] [--fallback-registry=<url>]
   paci generate (repo-index <path> | pkg-index)
@@ -21,7 +21,6 @@ Options:
   -c, --no-cleanup                   Don't cleanup the mess.
   -o, --overwrite                    Overwrite the config.
   -d, --debug                        Print debugging messages.
-  -a, --available                    List all available packages.
   -i, --installed                    List all installed packages.
   -r, --reuse                        Reuse the downloaded files.
                                      (only possible with --no-cleanup)

@@ -21,7 +21,7 @@ class List(Base):
             display_helper.print_list(["Name", "Version", "Description"], self.index.get_installed())
 
         # List all available packages
-        if self.options["--available"] or not self.options["--installed"]:
+        if not self.options["--installed"]:
             print(colored("Displaying all available packages...\n", 'yellow', attrs=['bold']))
 
             result = cache_helper.get_pkgs(self.settings["paci"]["registry"], self.repo_cache)
