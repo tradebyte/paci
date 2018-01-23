@@ -20,8 +20,13 @@ Options:
   -n, --no-config                    Omits the config.
   -c, --no-cleanup                   Don't cleanup the mess.
   -o, --overwrite                    Overwrite the config.
+  -d, --debug                        Print debugging messages.
   -r, --reuse                        Reuse the downloaded files.
                                      (only possible with --no-cleanup)
+  --no-choice                        Omit the questions and use the defaults.
+  --silent                           Don't print anything.
+  --main-registry=<url>              Set the <url> as default for the main registry.
+  --fallback-registry=<url>          Set the <url> as default for the fallback registry.
 
 Examples:
   paci install phpstorm
