@@ -7,7 +7,7 @@ Usage:
   paci update [--no-config] [--no-cleanup] [--reuse] [--overwrite] [--debug] <package>...
   paci search <package>
   paci refresh
-  paci list (--available | --installed)
+  paci list [--available] [--installed]
   paci remove
   paci configure [--no-choice] [--silent] [--main-registry=<url>] [--fallback-registry=<url>]
   paci generate (repo-index <path> | pkg-index)
