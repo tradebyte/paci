@@ -53,4 +53,4 @@ def get_max_desc_width(lst):
         if val is not max_value:
             length -= len(val)
 
-    return length - 15
+    return length - 20
