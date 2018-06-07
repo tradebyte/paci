@@ -172,10 +172,18 @@ main() {
     # Let's start
     echo -e "${GREEN}${BOLD}Welcome to the paci installer.\n\n"
 
-    # Step 0: Determine if we have a compatible OS
-    determine_os
+    # Step 0: Determine if we have a compatible OS or if we want to skip
+    # Ask if they want to skip the check
+    read -p "  ${INPUT}${YELLOW} Do you want to skip the compatibility check (y/N)? " yn
+    case $yn in
+        [Yy]) SKIP="true" ;;
+        *)
+            determine_os
+            echo ""
+            ;;
+    esac
 
-    if [ "$DISTRO" == "Ubuntu" ] || [ "$DISTRO" == "Debian" ]; then
+    if [ "$DISTRO" == "Ubuntu" ] || [ "$DISTRO" == "Debian" ] || [ "$SKIP" == "true" ] ; then
         # Step 1: Check or install the requirements
         echo "${INFO}${YELLOW} Checking dependencies...${NORMAL}"
         check_dependencies "$REQs"
