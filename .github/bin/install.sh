@@ -182,6 +182,7 @@ main() {
             echo ""
             ;;
     esac
+    echo ""
 
     if [ "$DISTRO" == "Ubuntu" ] || [ "$DISTRO" == "Debian" ] || [ "$SKIP" == "true" ] ; then
         # Step 1: Check or install the requirements
