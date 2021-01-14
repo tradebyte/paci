@@ -13,6 +13,19 @@ DEBUG = False or bool(os.environ.get("debug"))
 
 
 def debug_execute(cmd, cwd=None):
+    """Runs a command in debug mode and returns it's output
+
+    Parameters
+    ----------
+    cmd : str
+        The shell command which will be executed.
+    cwd : str, optional
+        The path to the working directory.
+
+    Returns
+    -------
+    A generator of the stdout with the results of the command.
+    """
     print("Executing command: " + cmd)
     popen = subprocess.Popen(cmd,
                              stdout=subprocess.PIPE,
