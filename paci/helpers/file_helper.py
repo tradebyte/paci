@@ -3,7 +3,7 @@
 import os
 import shutil
 import tarfile
-import ruamel.yaml
+from ruamel.yaml import YAML
 from jinja2 import Template
 
 
@@ -28,7 +28,8 @@ def read_yaml(file):
     """Read a YAML file and return its contents as a dict."""
     if os.path.exists(file):
         with open(file, "r") as file:
-            return ruamel.yaml.load(file.read(), ruamel.yaml.RoundTripLoader)
+            yaml = YAML()
+            return yaml.load(file.read())
     else:
         file(file, "w").close()
         return False
