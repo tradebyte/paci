@@ -114,6 +114,21 @@ Help:
 - Run the linter: `pylint paci`
 - New release of this CLI tool (pip): `$ python setup.py sdist bdist_wheel`
 
+## Releasing a new version
+
+### What you need to release a new paci version
+
+- Make sure to install `wheel` and `twine` via pip.
+- Have a [pypi-account](https://pypi.org/account/register/) with access to the paci package.
+
+### Releasing
+
+1. Bump up the version number in `paci/__init__.py` according to [semver](https://semver.org/).
+2. Build: `python setup.py sdist bdist_wheel`
+3. Test: `twine check dist/*`
+4. Publish it to the test.pypi.org registry: `twine upload --repository-url https://test.pypi.org/legacy/ dist/*`
+5. Check if everything worked on the test.pypi.org site.
+6. Publish it for real: `twine upload dist/*`
 
 ## Contributing
 
