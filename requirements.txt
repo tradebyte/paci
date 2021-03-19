@@ -6,7 +6,7 @@ ruamel.yaml==0.16.12
 json-traverse==0.3
 clint==0.5.1
 requests==2.13.0
-jinja2==2.9.6
+jinja2==2.11.3
 tinydb==3.2.2
 tabulate==0.7.7
 fuzzywuzzy==0.15.0
