@@ -139,3 +139,6 @@ class TestSettingsHelper(unittest.TestCase):
 
         with patch("os.path.isfile", return_value=False) as m:
             self.assertFalse(helper.settings_exist())
+
+if __name__ == '__main__':
+    unittest.main()
