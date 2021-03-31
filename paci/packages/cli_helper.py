@@ -56,15 +56,13 @@ def sh(cmd, cwd=None):
     True if the execution was successful but no output was given.
     The output of the command if it was successful and stdout wasn't empty.
     """
-
     # We want to interpolate env variables before executing the command, because shell=False
     # cannot handle these. Using shell=True is no option since it is a security risk.
     if isinstance(cmd, list):
-        cmd_list = os.path.expandvars(cmd.split())
-    else:
         cmd_list = cmd
-
-    cmd_list = list(map(lambda x: os.path.expandvars(x), cmd.split()))
+    else:
+        cmd_list = cmd.split()
+    cmd_list = list(map(lambda x: os.path.expandvars(x), cmd_list))
 
     if DEBUG:
         stdout = ""
