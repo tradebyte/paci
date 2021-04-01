@@ -10,4 +10,4 @@ requirements:
 	$(PIP) install -r requirements.txt --upgrade
 
 test:
-	$(PYTHON) -m unittest -v tests/test*
+	PYTHONPATH="$(shell pwd)" python -m unittest discover -s tests/
