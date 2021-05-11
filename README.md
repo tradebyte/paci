@@ -101,7 +101,7 @@ Help:
 
 ## Limitations
 
-* It currently targets Ubuntu 16.04 only!
+* It currently targets Ubuntu only!
 * It needs more packages.
 * It needs testing.
 * It only supports 64bit systems.
