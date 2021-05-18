@@ -20,16 +20,8 @@ class Shell(object):
         self.bash(*args, **kwargs)
 
     def bash(self, cmd, env=None, stdout=PIPE, stderr=PIPE, timeout=None, sync=True, cwd=None):
-        # We want to interpolate env variables before executing the command, because shell=False
-        # cannot handle these. Using shell=True is no option since it is a security risk.
-        if isinstance(cmd, list):
-            cmd_list = cmd
-        else:
-            cmd_list = cmd.split()
-        cmd_list = list(map(lambda x: os.path.expandvars(x), cmd_list))
-
         self.p = Popen(
-            cmd_list, shell=False, stdout=stdout, stdin=PIPE, stderr=stderr, env=env, cwd=cwd
+            cmd, shell=True, stdout=stdout, stdin=PIPE, stderr=stderr, env=env, cwd=cwd
         )
         if sync:
             self.sync(timeout)

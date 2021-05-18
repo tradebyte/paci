@@ -30,7 +30,7 @@ def debug_execute(cmd, cwd=None):
     popen = subprocess.Popen(cmd,
                              stdout=subprocess.PIPE,
                              universal_newlines=True,
-                             shell=False,
+                             shell=True,
                              cwd=cwd)
     for stdout_line in iter(popen.stdout.readline, ""):
         yield stdout_line
@@ -56,17 +56,10 @@ def sh(cmd, cwd=None):
     True if the execution was successful but no output was given.
     The output of the command if it was successful and stdout wasn't empty.
     """
-    # We want to interpolate env variables before executing the command, because shell=False
-    # cannot handle these. Using shell=True is no option since it is a security risk.
-    if isinstance(cmd, list):
-        cmd_list = cmd
-    else:
-        cmd_list = cmd.split()
-    cmd_list = list(map(lambda x: os.path.expandvars(x), cmd_list))
 
     if DEBUG:
         stdout = ""
-        for path in debug_execute(cmd_list, cwd=cwd):
+        for path in debug_execute(cmd, cwd=cwd):
             print(path, end="")
             stdout += path
         if stdout:
@@ -74,7 +67,7 @@ def sh(cmd, cwd=None):
         else:
             return False
     else:
-        executed_cmd = Shell(cmd_list, cwd=cwd)
+        executed_cmd = Shell(cmd, cwd=cwd)
         if executed_cmd.code == 0:
             if executed_cmd.stdout:
                 return str(executed_cmd)
