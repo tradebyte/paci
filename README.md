@@ -135,7 +135,7 @@ Help:
 You can release a new version by using Github workflow automatically.
 
 1. Bump up the version number in `paci/__init__.py` according to [semver](https://semver.org/).
-2. Create a new release tag version and it will start our pipeline and push the new version to PyPI and PyPI test.
+2. Create a new release tag version and it will start our pipeline and push the new version to PyPI and PyPI test after it is merged to main.
 
 ## Contributing
 
