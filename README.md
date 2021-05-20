@@ -130,7 +130,7 @@ Help:
 5. Check if everything worked on the test.pypi.org site.
 6. Publish it for real: `twine upload dist/*`
 
-### Releasingi automatically
+### Releasing to PyPI automatically
 
 You can release a new version by using Github workflow automatically.
 
