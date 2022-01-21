@@ -1,5 +1,5 @@
 pylint==2.7.4
-ipython==5.2.0
+ipython==7.16.3
 docopt==0.6.2
 better_exceptions==0.1.5
 ruamel.yaml==0.16.12
